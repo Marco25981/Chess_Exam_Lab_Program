@@ -20,6 +20,8 @@ find_package(wxWidgets REQUIRED COMPONENTS core base)
 # Includi e link automatici
 include(${wxWidgets_USE_FILE})
 
+
+
 include(CTest)
 enable_testing()
 
@@ -28,3 +30,17 @@ set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
 # Linka wxWidgets alle librerie
 target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES})
+
+include(FetchContent) 
+
+include(FetchContent)
+
+FetchContent_Declare(
+    googletest
+    URL https://github.com/google/googletest/archive/refs/tags/v1.17.0.tar.gz
+)
+
+FetchContent_MakeAvailable(googletest)
+
+include(GoogleTest)
+gtest_discover_tests(w)
