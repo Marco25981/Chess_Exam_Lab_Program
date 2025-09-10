@@ -14,6 +14,7 @@ add_executable(${PROJECT_NAME}
     Piece_factory/Knight/Knight.cpp 
     Piece_factory/King/King.cpp
     Handle_Chessboard.cpp
+    Movement_Handler.cpp
 )
 # Richiedi wxWidgets
 find_package(wxWidgets REQUIRED COMPONENTS core base)
@@ -31,16 +32,15 @@ include(CPack)
 # Linka wxWidgets alle librerie
 target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES})
 
-include(FetchContent) 
+#include(FetchContent) 
 
-include(FetchContent)
 
-FetchContent_Declare(
-    googletest
-    URL https://github.com/google/googletest/archive/refs/tags/v1.17.0.tar.gz
-)
+#FetchContent_Declare(
+#    googletest
+#    URL https://github.com/google/googletest/archive/refs/tags/v1.17.0.tar.gz
+#)
 
-FetchContent_MakeAvailable(googletest)
+#FetchContent_MakeAvailable(googletest)
 
-include(GoogleTest)
-gtest_discover_tests(w)
+#include(GoogleTest)
+#gtest_discover_tests(w)

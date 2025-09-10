@@ -7,6 +7,7 @@ Rock::Rock(int coordinate, char character)
 {
 
 }
+/*----Fine Costruttore----*/
 
 void Rock::update_legal_moves(Piece*board[64])
 {
@@ -19,4 +20,3 @@ void Rock::update_legal_moves(Piece*board[64])
     //registro le nuove mosse legali nella variabile della classe base Piece
     set_legal_moves(legal_moves);
 }
-/*----Fine Costruttore----*/

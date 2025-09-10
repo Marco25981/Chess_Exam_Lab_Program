@@ -55,6 +55,20 @@ bool Piece::is_legal_move(int square) const
     return false;
 }
 
+bool Piece::is_king()
+{
+    return type_piece==KING;
+}
+
+bool Piece::is_pawn()
+{
+    return type_piece==PAWN;
+}
+
+bool Piece::is_rock()
+{
+    return type_piece==ROCK;
+}
 /*Fine Getter*/
 
 /*Setter:*/

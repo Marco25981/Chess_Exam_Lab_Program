@@ -78,6 +78,10 @@ public:
         
         std::vector<int> get_legal_moves() const;
         std::map<int,std::vector<int>> get_map_path() const;
+
+        bool is_pawn();
+        bool is_rock();
+        bool is_king();
     /*-----------FINE GETTER-------------*/
 
     /*-----------SETTER------------------*/

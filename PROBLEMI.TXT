@@ -1,5 +1,0 @@
-Problemi:
-Okay riesco a disegnare la scacchiera devo riuscire a:
-1)dimensionare per bene le celle 
-2)creare la scacchiera reale quindi 8x8
-3)inserire i pezzi (k)
