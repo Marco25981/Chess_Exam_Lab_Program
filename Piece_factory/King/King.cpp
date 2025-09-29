@@ -17,7 +17,6 @@ bool King::get_is_check() const
 void King::update_legal_moves(Piece*board[64])
 {
     std::vector<int> legal_moves={};
-
 }
 
 

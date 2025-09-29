@@ -2,6 +2,7 @@
 #define MOVEMENT_PIECE_H
 
 #include <stack>
+#include <iostream>
 
 #include "Movement_Handler.h"
 #include "Handle_Chessboard.h"
@@ -12,12 +13,17 @@
 class Movement_Piece: public Movement_Handler
 {
 private:
+
     int count_draw;
 
     Piece *piece[64];
     
     std::stack<Movement_Handler> move_stack;
     std::vector<Piece*> pieces_attacking;
+    
+    Create_Piece* get_piece;
+    Handle_Chessboard* get_chessboard;
+
 public:
     Movement_Piece();
 
@@ -41,6 +47,9 @@ public:
     
     //Gestisci l'arrocco per la torre
     void handle_castling_rook();
+
+    //Gestisci lo scacco del re
+    void handle_king_check();
 };
 
 

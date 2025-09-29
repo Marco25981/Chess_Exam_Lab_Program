@@ -223,3 +223,25 @@ void Movement_Piece::handle_castling_rook()
     //la vecchia posizione della torre andrà a null
     piece[rook_position]=nullptr;
 }
+
+void Movement_Piece::handle_king_check()
+{
+    King* king=WHITE? get_piece->get_white_king(): get_piece->get_black_king();
+    
+    //Devo ottenere una lista di tutti i pezzi della scacchiera:
+    std::vector<Piece*> piece_different_color= get_chessboard->get_no_piece_turn();
+    
+    if(king->is_attack(piece,piece_different_color,pieces_attacking))
+    {
+        std::cout<<"King is under attack"<<std::endl;
+    }
+    
+}
+
+
+
+
+
+
+
+
