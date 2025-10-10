@@ -54,6 +54,10 @@ public:
 
     //Aggiorna le mosse possibili sotto scacco
     void update_moves_in_check();
+
+    //se sono il re e ho una mossa legale ma se la faccio vado
+    //sotto scacco allora non farla
+    void update_moves_check_and_pins();
     
 };
 

@@ -298,12 +298,52 @@ void Movement_Piece::update_moves_in_check()
         }
     }
 
-
-
-
 }
 
+void Movement_Piece::update_moves_check_and_pins()
+{
+    //Creo la tipologia di re
+    King* king=WHITE ? create->get_white_king(): create->get_black_king(); 
 
+    //Devo avere due vettori così confronto sia le mosse legali e i
+    //possibili scacchi:
+    std::vector<Piece *> turn_piece = handle_chess->get_piece_turn();
+    std::vector<Piece *> no_turn_piece = handle_chess->get_no_piece_turn();
+
+    std::vector<Piece *> piece_check_king = pieces_attacking;
+
+    for(Piece* pieces: turn_piece)
+    {
+        //skippo caso re:
+        if(pieces->is_king())
+        {
+            continue;
+        }
+    
+        pieces_attacking={};
+    
+        for(int move: pieces->get_legal_moves())
+        {
+            int original_square= pieces->get_square();
+            Piece* original_piece= piece[move];
+
+            //Muovi temporaneamente il pezzo:
+            piece[move] = pieces;
+            piece[original_square] = nullptr;
+            pieces->set_square(move);
+
+            //Aggiorna le mosse per i pezzi del turno opposto:
+            for(Piece*p : no_turn_piece)
+            {
+                
+            }
+        }
+    
+    
+    
+    
+    }
+}
 
 
 
