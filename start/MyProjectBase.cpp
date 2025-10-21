@@ -45,4 +45,5 @@ MyPanel1::MyPanel1( wxWindow* parent, wxWindowID id, const wxPoint& pos, const w
 
 MyPanel1::~MyPanel1()
 {
+	
 }

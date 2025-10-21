@@ -2,7 +2,11 @@
 #define DRAW_BOARD_H
 
 #include "start/MyProjectBase.h"
+
 #include <wx/wx.h>
+#include <map>
+
+#include "Movement_Piece.h"
 
 /*
     NOTE:
@@ -17,31 +21,26 @@
 class Draw_board: public MyPanel1
 {
 private:
-    /* data */
     int selected_square;
 
-    /*-------------Per il re-------------*/
-    wxBitmap resized;
-    wxImage image;
+    //Mappa che serve a disegnare i pezzi
+    std::map<char,wxBitmap> chess_piece_bitmaps;
+
+    Movement_Piece* game=nullptr;
     
-    //percorso del file 
-    wxString file="/home/marco/Documenti/Visual_Studio_Code_esercizi/es13Creare_wxBitmap/image/K.png";
-    
-    static const int image_width=70;
-    static const int image_height=70;
-    
-    wxBitmapType format= wxBITMAP_TYPE_PNG;
-    /*----------------------------------*/
 
 public:
-    //Costruttore
+    //Costruttore principale
     Draw_board(wxFrame* parent);
 
     //Disegno dei quadratini
     void draw_squares(wxDC& dc, int row, int col, wxCoord square_size);
-
-    //Funzione del re
-    void render_whiteking(wxDC& dc);
+    
+    //Disegno pezzi
+    void draw_piece(wxDC& dc, int row, int col, wxCoord square_size);
+    
+    //Rappresentazione dei pezzi
+    void render_piece();
 
     //Disegno principale
     void on_paint(wxPaintEvent& evt);

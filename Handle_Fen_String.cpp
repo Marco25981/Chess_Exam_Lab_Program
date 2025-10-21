@@ -112,6 +112,9 @@ void Handle_Fen_String::add_fen_to_map(std::string fen_string)
     this->occurences_position[fen_string]++;
 }
 
-
+std::string Handle_Fen_String::get_fen_string()
+{
+    return fen_string;
+}
 
 

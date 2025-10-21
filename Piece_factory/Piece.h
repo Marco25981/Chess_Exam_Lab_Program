@@ -52,13 +52,14 @@ private:
     std::vector<int> legal_moves;
     std::map<int,std::vector<int>> map_path;          
                                             
-                                        //Funzionamento delle mosse:
-                                        //+8 scendi alla cella inferiore
-                                        //-8 sali alla cella superiore
-                                        //+1 vo a destra
-                                        //-1 vo a sinistra 
+    //Funzionamento delle mosse:
+    //+8 scendi alla cella inferiore
+    //-8 sali alla cella superiore
+    //+1 vo a destra
+    //-1 vo a sinistra 
 
 public:
+
     /*------COSTRUTTORE-------------*/
     Piece(int pos, char c);
     /*------FINE COSTRUTTORE--------*/

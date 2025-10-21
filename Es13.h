@@ -10,11 +10,9 @@ class Es13: public MyFrame1
 private:
     Draw_board* board=nullptr;
 public:
-
     /*Costruttore del form:*/
     Es13(wxWindow* parent);
     /*---------------------*/
-
     void open_panel(wxCommandEvent& event);
     
     void open_board(wxCommandEvent& event);

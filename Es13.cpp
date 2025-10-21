@@ -12,10 +12,15 @@ Es13::Es13(wxWindow* parent)
 void Es13::open_panel(wxCommandEvent& event)
 {
     
+    
+    
+    
 }
 
 void Es13::open_board(wxCommandEvent& event)
 {
+    
     board= new Draw_board(this);
     board->Show();
+    
 }

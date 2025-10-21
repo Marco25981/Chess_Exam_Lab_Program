@@ -28,6 +28,9 @@ private:
 public:
     Movement_Piece();
 
+    //Ottieni il singolo puntatore piece
+    Piece** get_board();
+
     //Gestione movimenti da casella a casella
     void handle_move(int from_square, int to_square);
 
@@ -58,7 +61,7 @@ public:
     //se sono il re e ho una mossa legale ma se la faccio vado
     //sotto scacco allora non farla
     void update_moves_check_and_pins();
-    
+
 };
 
 

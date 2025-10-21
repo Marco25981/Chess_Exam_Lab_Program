@@ -6,6 +6,13 @@ Movement_Piece::Movement_Piece()
     update_move_pieces();
 }
 
+//Funzione che serve a ottenere il puntatore singolo nella scacchiera:
+Piece** Movement_Piece::get_board()
+{
+    return piece;
+}
+
+
 //Gestisci il movimento dei pezzi
 void Movement_Piece::handle_move(int from_square, int to_square)
 {

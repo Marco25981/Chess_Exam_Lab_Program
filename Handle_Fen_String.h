@@ -24,6 +24,9 @@ public:
 
     //Aggiungi la fen alla mappa
     void add_fen_to_map(std::string fen_string);
+
+    //getter fen_string:
+    std::string get_fen_string();
 };
 
 
