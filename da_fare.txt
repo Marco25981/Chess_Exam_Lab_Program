@@ -1,0 +1,5 @@
+Problema: non riesco a caricare correttamente l'immagine nella bitmap, 
+nella parte di debug se provi a mettere bitmap.is_ok() da errore quindi non 
+è okay.
+Riguarda come caricare correttamente l'inserimento di immagini dentro la bitmap
+

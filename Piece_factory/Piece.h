@@ -59,7 +59,6 @@ private:
     //-1 vo a sinistra 
 
 public:
-
     /*------COSTRUTTORE-------------*/
     Piece(int pos, char c);
     /*------FINE COSTRUTTORE--------*/

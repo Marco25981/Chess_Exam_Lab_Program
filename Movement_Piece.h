@@ -7,60 +7,53 @@
 
 #include "Movement_Handler.h"
 #include "Handle_Chessboard.h"
+#include "Handle_Fen_String.h"
 #include "Create_Piece.h"
 #include "Piece_factory/Pawn/Pawn.h"
 #include "Piece_factory/King/King.h"
 
-class Movement_Piece: public Movement_Handler
+class Movement_Piece//: public Movement_Handler
 {
 private:
 
+    int from_square;
+    int to_square;
+
+    char captured_piece_type;
     int count_draw;
 
     Piece *piece[64];
     
-    std::stack<Movement_Handler> move_stack;
+    std::stack<Movement_Piece> move_stack;
     std::vector<Piece*> pieces_attacking;
     
-    Create_Piece* create;
-    Handle_Chessboard* handle_chess;
-
+    Create_Piece* create = nullptr;
+    Handle_Fen_String* fen=nullptr;
+    Piece *piece1 = nullptr;
+    Piece *captured_piece = nullptr;
 public:
     Movement_Piece();
+
+    /*----  GETTER   ---*/
+    int get_from_square();
+    int get_to_square();
+    Piece* get_piece();
+    Piece* get_captured_piece();
+    char get_captured_piece_type();
+    /*----  FINE GETTER   ---*/
+    
+    /*----  SETTER   ---*/
+    void set_from_square(int new_from_square);
+    void set_to_square(int new_to_square);
+    void set_piece(Piece* new_piece);
+    void set_captured_piece(Piece* new_captured_piece);
+    void set_captured_piece_type(char new_captured_piece_type);
+    /*----  FINE SETTER   ---*/
 
     //Ottieni il singolo puntatore piece
     Piece** get_board();
 
-    //Gestione movimenti da casella a casella
-    void handle_move(int from_square, int to_square);
-
-    //Aggiungi la mossa alla lista di mosse fatte nella partita
-    void add_move_to_stack(Movement_Handler move);
-
-    //Ad ogni mossa le mosse legali dovranno essere aggiornate
-    void update_move_pieces();
-
-    //Imposta l'empassant square
-    void set_enpassant_square();
-
-    //Gestisci enpassant
-    void handle_enpassant_capture();
     
-    //Gestisci l'arrocco a destra
-    void handle_castling_rights();
-    
-    //Gestisci l'arrocco per la torre
-    void handle_castling_rook();
-
-    //Gestisci lo scacco del re
-    void handle_king_check();
-
-    //Aggiorna le mosse possibili sotto scacco
-    void update_moves_in_check();
-
-    //se sono il re e ho una mossa legale ma se la faccio vado
-    //sotto scacco allora non farla
-    void update_moves_check_and_pins();
 
 };
 

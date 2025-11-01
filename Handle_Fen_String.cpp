@@ -1,7 +1,14 @@
 #include "Handle_Fen_String.h"
 
 Handle_Fen_String::Handle_Fen_String()
+    :create_ptr(new Create_Piece())
 {
+    
+}
+
+void Handle_Fen_String::fen_string_stuff()
+{
+    //wxLogMessage("Entro in fen_string_stuff");
     fen_string="rnbqkbnr/pppppppp/8/8/PPPPPPPP/RNBQKBNR - w KQkq - 0 1";
     //Imposto la scacchiera alla fase iniziale
     set_board_fenstring(fen_string);
@@ -9,6 +16,7 @@ Handle_Fen_String::Handle_Fen_String()
 
 void Handle_Fen_String::set_board_fenstring(std::string fen_string)
 {
+    
     for(int i=0; i<64; i++)
     {
         piece[i]=nullptr;
@@ -39,7 +47,7 @@ void Handle_Fen_String::set_board_fenstring(std::string fen_string)
             else
             {
                 //Creazione e posizionamento dei pezzi
-                //piece[row*8+col]=create_piece(row*8+col,set_board);
+                piece[row*8+col]=create_ptr->create_piece(set_board,row*8+col);
                 col++;
             }
         }
@@ -117,4 +125,7 @@ std::string Handle_Fen_String::get_fen_string()
     return fen_string;
 }
 
-
+Piece** Handle_Fen_String::get_piece()
+{
+    return piece;
+}

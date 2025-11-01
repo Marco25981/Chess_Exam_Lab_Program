@@ -138,7 +138,6 @@ Piece::Piece(int pos_square, char c)
     //Inizializzo moved a false pk non ho ancora mosso
     this->is_moved=false;   
 }
-
 /*Fine Costruttore*/
 
 /*Funzioni*/
@@ -287,13 +286,3 @@ void Piece::remove_legal_move(int square)
 }
 
 /*Fine Funzioni*/
-
-
-
-
-
-
-
-
-
-

@@ -2,8 +2,9 @@
 #define HANDLE_CHESSBOARD_H
 
 #include <vector>
-
-#include "Movement_Handler.h"
+#include <wx/wx.h>
+//#include "Movement_Handler.h"
+#include "Movement_Piece.h"
 #include "Piece_factory/King/King.h"
 
 class Handle_Chessboard
@@ -15,6 +16,7 @@ public:
     //Costruttore
     Handle_Chessboard();
 
+    void chessboard_stuff();
     void change_turn();
 
     std::vector<Piece*> get_piece_turn();
@@ -24,7 +26,6 @@ public:
     Color get_turn();
     /*----------FINE GETTER----------------*/
 
-    
 };
 
 #endif //HANDLE_CHESSBOARD_H

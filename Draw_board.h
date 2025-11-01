@@ -5,9 +5,11 @@
 
 #include <wx/wx.h>
 #include <map>
-
+#include <wx/bitmap.h>
+#include <wx/image.h>
 #include "Movement_Piece.h"
-
+#include "Handle_Fen_String.h"
+#include "Handle_Chessboard.h"
 /*
     NOTE:
     Il mio programma crea le celle e inizia da 0,0.
@@ -23,12 +25,15 @@ class Draw_board: public MyPanel1
 private:
     int selected_square;
 
+    wxBitmap bitmap;
+
     //Mappa che serve a disegnare i pezzi
     std::map<char,wxBitmap> chess_piece_bitmaps;
 
-    Movement_Piece* game=nullptr;
+    Movement_Piece* game_movement=nullptr;
+    Handle_Chessboard* chess_handler=nullptr;
+    Handle_Fen_String* fen_handler=nullptr;
     
-
 public:
     //Costruttore principale
     Draw_board(wxFrame* parent);
@@ -48,6 +53,7 @@ public:
     //Gestione ridimensionamento finestra
     void OnSize(wxSizeEvent& event);
     
+    ~Draw_board();
 };
 
 #endif //DRAW_BOARD_H

@@ -3,6 +3,7 @@
 
 #include "wx/wx.h"
 #include "Es13.h"
+#include "wx/image.h"
 
 class MyApp: public wxApp
 {

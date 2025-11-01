@@ -1,8 +1,21 @@
 #include "Draw_board.h"
 
 Draw_board::Draw_board(wxFrame* parent)
-    :MyPanel1(parent,6000,wxPoint(200,100)),game()
+    :MyPanel1(parent,6000,wxPoint(200,100)),
+    //Inizializzazione dei puntatori:
+        game_movement(new Movement_Piece()),
+        chess_handler(new Handle_Chessboard()),
+        fen_handler(new Handle_Fen_String())        
     {
+        //Posizione iniziale:
+        fen_handler->fen_string_stuff();
+        chess_handler->chessboard_stuff();
+        
+        //Rappresentazione dei pezzi:
+        render_piece();
+
+        //game_movement->update_move_pieces();
+        
         Bind(wxEVT_PAINT,&Draw_board::on_paint,this);
         
     }
@@ -13,9 +26,11 @@ void Draw_board::on_paint(wxPaintEvent& evt)
     wxPaintDC dc(this);
     wxSize size= GetClientSize();   //Prende la grandezza della bitmap(guarda in start)
     
+    
+    
     wxCoord square_size=size.GetWidth()/8; //Divido per 8 perchè ogni riga è formata da 8 caselle
        
-    //square_size=56
+    //square_size è di: 56
 
     //Disegno la schacchiera:
     for(int row=0; row<8; row++)
@@ -23,10 +38,11 @@ void Draw_board::on_paint(wxPaintEvent& evt)
         for(int col=0; col<8; col++)
         {
             draw_squares(dc,row,col,square_size);
+            draw_piece(dc,row,col,square_size);
         }
     }
 
-    //render_piece();
+
 }
 
 /*
@@ -63,20 +79,30 @@ void Draw_board::draw_squares(wxDC& dc, int row, int col, wxCoord square_size)
     }
 
     dc.SetBrush(square_color);
-    
-    wxRect squareRect(x, y, square_size, square_size);
-    
+    wxRect squareRect(x, y, square_size, square_size);    
     dc.DrawRectangle(squareRect);
 }
 
 void Draw_board::draw_piece(wxDC& dc, int row, int col, wxCoord square_size)
 {
     
+    if(fen_handler->get_piece()[row*8+col]==nullptr)
+    {
+        return;
+    }
+
+    wxCoord x= col * square_size;
+    wxCoord y= row * square_size;
+
+    //dc.DrawBitmap(chess_piece_bitmaps[
+        //fen_handler->get_board()[row*8+col]->get_name_piece()],x,y,true);
+    dc.DrawBitmap(chess_piece_bitmaps[
+        fen_handler->get_piece()[row*8+col]->get_name_piece()],x,y,false);
 }
 
 void Draw_board::render_piece()
 {
-    
+    //wxLogMessage("entro in render_piece");
     char all_piece[]=
     {
         'b','k','n','p','q','r',
@@ -84,18 +110,19 @@ void Draw_board::render_piece()
     };
 
     for(char piece:all_piece)
-    {
-        wxBitmap bitmap; 
-
+    { 
         //Percorso del file:
         std::string path = "/home/marco/Documenti/Visual_Studio_Code_esercizi/es13Creare_wxBitmap/image/"+std::string(1,piece)+".png";
 
         //Verifico il caricamento dell'immagine:
         bool load_result = bitmap.LoadFile(path,wxBITMAP_TYPE_PNG);
-
-        int square_size= GetClientSize().GetWidth()/8;
         
-               
+        /*if(bitmap.IsOk())
+        {
+            wxLogMessage("bitmap okay");
+        }*/
+        int square_size= GetClientSize().GetWidth()/8;
+        //wxLogMessage("square size: %d",square_size);
 
         //Dimensiona immagine 100x100
         if(load_result)
@@ -103,11 +130,13 @@ void Draw_board::render_piece()
             wxImage image= bitmap.ConvertToImage();
             image.Rescale(square_size,square_size,wxIMAGE_QUALITY_HIGH);
             bitmap=wxBitmap(image);
-
+            /*if(bitmap.IsOk())
+            {
+                wxLogMessage("bitmap okay :)))");
+            }*/
             chess_piece_bitmaps[piece]=bitmap;
         }
-    }
-    
+    }    
 }
 
 void Draw_board::OnSize(wxSizeEvent& event)
@@ -115,4 +144,16 @@ void Draw_board::OnSize(wxSizeEvent& event)
     Refresh();
     //skip the event.
     event.Skip();
+}
+
+Draw_board::~Draw_board()
+{
+    delete game_movement;
+    game_movement=nullptr;
+
+    delete chess_handler;
+    chess_handler=nullptr;
+
+    delete fen_handler;
+    fen_handler=nullptr;
 }

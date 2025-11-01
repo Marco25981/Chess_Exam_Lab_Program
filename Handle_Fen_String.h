@@ -3,19 +3,24 @@
 
 #include <string>
 #include <unordered_map>
-
+#include <wx/wx.h>
 #include "Piece_factory/Piece.h"
+#include "Create_Piece.h"
 
 class Handle_Fen_String
 {
 private:
     std::string fen_string; 
+
     std::unordered_map<std::string, int> occurences_position;
+    Create_Piece* create_ptr=nullptr;
     Piece *piece[64];   //Serve per controllare i pezzi
                         //tramite puntatore nella scacchiera
+    
 public:
     Handle_Fen_String();
     
+    void fen_string_stuff();
     //Funzione che serve all'inizio a far posizionare i pezzi
     void set_board_fenstring(std::string fen_string);
 
@@ -27,6 +32,7 @@ public:
 
     //getter fen_string:
     std::string get_fen_string();
+    Piece **get_piece();
 };
 
 

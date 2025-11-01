@@ -3,11 +3,15 @@
 //Costruttore:
 Handle_Chessboard::Handle_Chessboard()
 {
-    //Parte il bianco
-    turn=WHITE;
     
 }
 
+void Handle_Chessboard::chessboard_stuff()
+{
+    //wxLogMessage("entro in chessboard_stuff");
+    //Parte il bianco
+    turn=WHITE;
+}
 void Handle_Chessboard::change_turn()
 {
     if(turn==WHITE)
