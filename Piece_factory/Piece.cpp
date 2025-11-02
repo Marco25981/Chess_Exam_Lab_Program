@@ -17,6 +17,12 @@ int Piece::get_square() const
     return square;
 }
 
+std::string Piece::get_debug() const
+{
+    std::string ciao= "eila campione";
+    return ciao;
+}
+
 char Piece::get_name_piece() const
 {
     return name_piece;

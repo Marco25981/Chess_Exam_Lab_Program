@@ -1,6 +1,8 @@
 #ifndef CREATE_PIECE_H
 #define CREATE_PIECE_H
 
+#include <wx/wx.h>
+
 #include "Piece_factory/Piece.h"
 #include "Piece_factory/Pawn/Pawn.h"
 #include "Piece_factory/Bishop/Bishop.h"
@@ -15,7 +17,7 @@ private:
     King *white_king;   
     King *black_king;   
 public:
-
+    Create_Piece();
     //Crea il pezzo con la fen
     Piece* create_piece(char c, int square);
 

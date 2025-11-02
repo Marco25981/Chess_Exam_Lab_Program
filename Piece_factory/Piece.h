@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
     //IDENTIFICARE COLORE SQUADRA
     enum Color
@@ -66,6 +67,8 @@ public:
     /*-----------GETTER-------------*/
         //Ottieni il numero della riga:
         int get_row() const;
+
+        std::string get_debug() const;
 
         //Ottieni il numero della colonna:
         int get_col() const;

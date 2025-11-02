@@ -1,5 +1,8 @@
-Problema: non riesco a caricare correttamente l'immagine nella bitmap, 
-nella parte di debug se provi a mettere bitmap.is_ok() da errore quindi non 
-è okay.
-Riguarda come caricare correttamente l'inserimento di immagini dentro la bitmap
+Problema: 
+Handle_Fen_String.cpp riga 60.....
 
+Con log capisco che sono riuscito a inizializzare piece[64] ma non mi registra
+il nome del pezzo da nessuna parte. Secondo me è per questo che non mi stampa i
+bitmap nella mappa a draw_board.cpp perchè non riesce a trovare il char associato
+alla bitmap.
+Soluzione: registra il char insomma e vediamo che succede

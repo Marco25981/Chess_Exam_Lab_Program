@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <wx/wx.h>
+#include <wx/log.h>
 //#include "Movement_Handler.h"
 #include "Movement_Piece.h"
 #include "Piece_factory/King/King.h"

@@ -2,11 +2,16 @@
 
 Movement_Piece::Movement_Piece()
     //Inializzazione puntatori:
-    :create(new Create_Piece()),
+    ://create(new Create_Piece()),
     fen(new Handle_Fen_String())
     {  
+        //wxLogMessage("Entro nel costruttore di Movement_Piece");
+        /*if(fen!=nullptr)
+        {
+            wxLogMessage("fen è inizializzato");
+        }*/
         fen->fen_string_stuff();
-           
+        
     }
 /*-------------GETTER------------------*/
 int Movement_Piece::get_from_square()

@@ -8,9 +8,15 @@ Draw_board::Draw_board(wxFrame* parent)
         fen_handler(new Handle_Fen_String())        
     {
         //Posizione iniziale:
+        
         fen_handler->fen_string_stuff();
         chess_handler->chessboard_stuff();
         
+        //fen_handler->get_piece()[row*8+col]
+        /*if(game_movement->get_board())
+        {
+            wxLogMessage("il puntatore piece[0] è inizializzato correttamente:))");
+        }*/
         //Rappresentazione dei pezzi:
         render_piece();
 
@@ -24,13 +30,9 @@ Draw_board::Draw_board(wxFrame* parent)
 void Draw_board::on_paint(wxPaintEvent& evt)
 {
     wxPaintDC dc(this);
-    wxSize size= GetClientSize();   //Prende la grandezza della bitmap(guarda in start)
-    
-    
+    wxSize size= GetClientSize();   //Prende la grandezza della bitmap(guarda in start)    
     
     wxCoord square_size=size.GetWidth()/8; //Divido per 8 perchè ogni riga è formata da 8 caselle
-       
-    //square_size è di: 56
 
     //Disegno la schacchiera:
     for(int row=0; row<8; row++)
@@ -41,8 +43,6 @@ void Draw_board::on_paint(wxPaintEvent& evt)
             draw_piece(dc,row,col,square_size);
         }
     }
-
-
 }
 
 /*
@@ -90,7 +90,7 @@ void Draw_board::draw_piece(wxDC& dc, int row, int col, wxCoord square_size)
     {
         return;
     }
-
+    
     wxCoord x= col * square_size;
     wxCoord y= row * square_size;
 
@@ -117,15 +117,11 @@ void Draw_board::render_piece()
         //Verifico il caricamento dell'immagine:
         bool load_result = bitmap.LoadFile(path,wxBITMAP_TYPE_PNG);
         
-        /*if(bitmap.IsOk())
-        {
-            wxLogMessage("bitmap okay");
-        }*/
         int square_size= GetClientSize().GetWidth()/8;
         //wxLogMessage("square size: %d",square_size);
 
         //Dimensiona immagine 100x100
-        if(load_result)
+        if(load_result && bitmap.IsOk())
         {
             wxImage image= bitmap.ConvertToImage();
             image.Rescale(square_size,square_size,wxIMAGE_QUALITY_HIGH);
@@ -135,6 +131,11 @@ void Draw_board::render_piece()
                 wxLogMessage("bitmap okay :)))");
             }*/
             chess_piece_bitmaps[piece]=bitmap;
+        }
+        else
+        {
+            wxLogMessage("1 bitmap è inutilizzabile...");
+            continue;
         }
     }    
 }
