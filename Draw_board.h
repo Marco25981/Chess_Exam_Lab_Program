@@ -10,6 +10,7 @@
 #include "Movement_Piece.h"
 #include "Handle_Fen_String.h"
 #include "Handle_Chessboard.h"
+#include "Handle_Mouse_Input.h"
 /*
     NOTE:
     Il mio programma crea le celle e inizia da 0,0.
@@ -33,7 +34,8 @@ private:
     Movement_Piece* game_movement=nullptr;
     Handle_Chessboard* chess_handler=nullptr;
     Handle_Fen_String* fen_handler=nullptr;
-    
+    Handle_Mouse_Input* mouse_handler=nullptr;
+
 public:
     //Costruttore principale
     Draw_board(wxFrame* parent);

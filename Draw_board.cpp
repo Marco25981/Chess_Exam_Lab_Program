@@ -5,25 +5,21 @@ Draw_board::Draw_board(wxFrame* parent)
     //Inizializzazione dei puntatori:
         game_movement(new Movement_Piece()),
         chess_handler(new Handle_Chessboard()),
-        fen_handler(new Handle_Fen_String())        
+        fen_handler(new Handle_Fen_String()),
+        mouse_handler(new Handle_Mouse_Input(this))             
     {
         //Posizione iniziale:
         
         fen_handler->fen_string_stuff();
         chess_handler->chessboard_stuff();
         
-        //fen_handler->get_piece()[row*8+col]
-        /*if(game_movement->get_board())
-        {
-            wxLogMessage("il puntatore piece[0] è inizializzato correttamente:))");
-        }*/
         //Rappresentazione dei pezzi:
         render_piece();
 
         //game_movement->update_move_pieces();
         
         Bind(wxEVT_PAINT,&Draw_board::on_paint,this);
-        
+        this->Bind(wxEVT_LEFT_UP, &Handle_Mouse_Input::OnMouseLeftUp, mouse_handler);
     }
 
 
@@ -94,10 +90,8 @@ void Draw_board::draw_piece(wxDC& dc, int row, int col, wxCoord square_size)
     wxCoord x= col * square_size;
     wxCoord y= row * square_size;
 
-    //dc.DrawBitmap(chess_piece_bitmaps[
-        //fen_handler->get_board()[row*8+col]->get_name_piece()],x,y,true);
     dc.DrawBitmap(chess_piece_bitmaps[
-        fen_handler->get_piece()[row*8+col]->get_name_piece()],x,y,false);
+        fen_handler->get_piece()[row*8+col]->get_name_piece()],x,y,true);
 }
 
 void Draw_board::render_piece()
@@ -157,4 +151,7 @@ Draw_board::~Draw_board()
 
     delete fen_handler;
     fen_handler=nullptr;
+
+    //delete mouse_handler;
+    //mouse_handler=nullptr;
 }

@@ -26,7 +26,7 @@ public:
     /*----------GETTER----------------*/
     Color get_turn();
     /*----------FINE GETTER----------------*/
-
+    ~Handle_Chessboard();
 };
 
 #endif //HANDLE_CHESSBOARD_H

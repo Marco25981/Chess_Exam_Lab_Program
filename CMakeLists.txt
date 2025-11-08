@@ -14,10 +14,10 @@ add_executable(${PROJECT_NAME}
     Piece_factory/Knight/Knight.cpp 
     Piece_factory/King/King.cpp
     Handle_Chessboard.cpp
-    Movement_Handler.cpp
     Handle_Fen_String.cpp
     Movement_Piece.cpp
     Create_Piece.cpp
+    Handle_Mouse_Input.cpp
 )
 # Richiedi wxWidgets
 find_package(wxWidgets REQUIRED COMPONENTS core base)

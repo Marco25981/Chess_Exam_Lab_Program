@@ -30,8 +30,8 @@ void Handle_Fen_String::set_board_fenstring(std::string fen_string)
 
     //Prendo la fen per la schacchiera:
     std::string board_fen_string=fen_string.substr(0,fen_string.find(" "));
-    wxString eila=board_fen_string;
-    wxLogMessage("stringa dentro board_fen_string: %s",eila);
+    //wxString eila=board_fen_string;
+    //wxLogMessage("stringa dentro board_fen_string: %s",eila);
     
     int row=0;
     int col=0;
@@ -40,6 +40,7 @@ void Handle_Fen_String::set_board_fenstring(std::string fen_string)
     {
         //wxString aola=set_board;
         //wxLogMessage("dentro al for set_board assume: %s",aola);
+        //rnbqkbnr/pppppppp/8/8/PPPPPPPP/RNBQKBNR
         if(set_board=='/')
         {
             row++;
@@ -53,6 +54,7 @@ void Handle_Fen_String::set_board_fenstring(std::string fen_string)
                 int conv=set_board-'0'; //Nella conversione ASCII per avere 8 devo sottrare
                                         //il valore ASCII di 8 - il valore ASCII di 0 
                 col+=conv;
+                row++;
             }
             else
             {
@@ -142,4 +144,16 @@ std::string Handle_Fen_String::get_fen_string()
 Piece** Handle_Fen_String::get_piece()
 {
     return piece;
+}
+
+Handle_Fen_String::~Handle_Fen_String()
+{
+    delete create_ptr;
+    create_ptr=nullptr;
+
+    for(int i=0; i<64; i++)
+    {
+        piece[i]=nullptr;
+        delete piece[i];        
+    }
 }

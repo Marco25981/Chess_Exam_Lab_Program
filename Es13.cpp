@@ -19,7 +19,9 @@ void Es13::open_panel(wxCommandEvent& event)
 
 void Es13::open_board(wxCommandEvent& event)
 {
-    wxMessageBox("Entro in es13::open_board");
     board= new Draw_board(this);
-    board->Show();    
+   
+    board->Show();   
+
 }
+

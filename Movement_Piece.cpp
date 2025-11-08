@@ -72,3 +72,24 @@ Piece** Movement_Piece::get_board()
 {
     return piece;
 }
+
+Movement_Piece::~Movement_Piece()
+{
+    delete create;
+    create=nullptr;
+
+    delete fen;
+    fen=nullptr;
+
+    delete piece1;
+    piece1=nullptr;
+
+    delete captured_piece;
+    captured_piece=nullptr;
+
+    for(int i=0; i<64; i++)
+    {        
+        piece[i]=nullptr;
+        delete piece[i];        
+    }
+}

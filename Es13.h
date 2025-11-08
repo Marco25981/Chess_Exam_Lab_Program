@@ -4,6 +4,7 @@
 #include "wx/wx.h"
 #include "start/MyProjectBase.h"
 #include "Draw_board.h"
+#include "Handle_Mouse_Input.h"
 
 class Es13: public MyFrame1
 {
@@ -16,6 +17,7 @@ public:
     void open_panel(wxCommandEvent& event);
     
     void open_board(wxCommandEvent& event);
+
 };
 
 

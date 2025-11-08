@@ -5,14 +5,14 @@
 #include <iostream>
 #include <algorithm>
 
-#include "Movement_Handler.h"
+
 #include "Handle_Chessboard.h"
 #include "Handle_Fen_String.h"
 #include "Create_Piece.h"
 #include "Piece_factory/Pawn/Pawn.h"
 #include "Piece_factory/King/King.h"
 
-class Movement_Piece//: public Movement_Handler
+class Movement_Piece
 {
 private:
 
@@ -53,7 +53,7 @@ public:
     //Ottieni il singolo puntatore piece
     Piece** get_board();
 
-    
+    ~Movement_Piece();
 
 };
 

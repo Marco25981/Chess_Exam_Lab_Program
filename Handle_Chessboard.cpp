@@ -57,5 +57,12 @@ Color Handle_Chessboard::get_turn()
     return turn;
 }
 
-
+Handle_Chessboard::~Handle_Chessboard()
+{
+    for(int i=0; i<64; i++)
+    {
+        board[i]=nullptr;
+        delete board[i];                
+    }
+}
 

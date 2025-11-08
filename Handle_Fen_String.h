@@ -33,6 +33,8 @@ public:
     //getter fen_string:
     std::string get_fen_string();
     Piece **get_piece();
+
+    ~Handle_Fen_String();
 };
 
 
