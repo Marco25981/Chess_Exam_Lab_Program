@@ -11,22 +11,22 @@
 class Handle_Chessboard
 {
 private:
-    Color turn;  
-    Piece *board[64];
+    //Color turn;  
+    //Piece *board[64];
 public:
     //Costruttore
     Handle_Chessboard();
 
-    void chessboard_stuff();
-    void change_turn();
+    //void chessboard_stuff();
+    //void change_turn();
 
-    std::vector<Piece*> get_piece_turn();
-    std::vector<Piece*> get_no_piece_turn();
+    //std::vector<Piece*> get_piece_turn();
+    //std::vector<Piece*> get_no_piece_turn();
 
-    /*----------GETTER----------------*/
-    Color get_turn();
-    /*----------FINE GETTER----------------*/
-    ~Handle_Chessboard();
+    //----------GETTER----------------
+    //Color get_turn();
+    //----------FINE GETTER----------------
+    //~Handle_Chessboard();
 };
 
 #endif //HANDLE_CHESSBOARD_H

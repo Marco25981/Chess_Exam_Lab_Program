@@ -13,11 +13,10 @@ private:
 public:
     /*Costruttore del form:*/
     Es13(wxWindow* parent);
-    /*---------------------*/
-    void open_panel(wxCommandEvent& event);
-    
+    /*---------------------*/  
     void open_board(wxCommandEvent& event);
-
+    
+    ~Es13();
 };
 
 

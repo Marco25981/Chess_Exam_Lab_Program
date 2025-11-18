@@ -36,11 +36,9 @@ class MyFrame1 : public wxFrame
 		enum
 		{
 			ID_FRAME = 6000,
-			ID_BITMAP,
 			ID_BOARD,
 		};
 
-		wxButton* btn_bitmap;
 		wxButton* btn_board;
 
 	public:

@@ -5,14 +5,12 @@ Draw_board::Draw_board(wxFrame* parent)
     //Inizializzazione dei puntatori:
         game_movement(new Movement_Piece()),
         chess_handler(new Handle_Chessboard()),
-        fen_handler(new Handle_Fen_String()),
-        mouse_handler(new Handle_Mouse_Input(this))             
+        fen_shared(new Handle_Fen_String()),
+        mouse_handler(new Handle_Mouse_Input(this,fen_shared))           
     {
         //Posizione iniziale:
-        
-        fen_handler->fen_string_stuff();
-        chess_handler->chessboard_stuff();
-        
+        fen_shared.get()->fen_string_stuff();
+
         //Rappresentazione dei pezzi:
         render_piece();
 
@@ -81,17 +79,16 @@ void Draw_board::draw_squares(wxDC& dc, int row, int col, wxCoord square_size)
 
 void Draw_board::draw_piece(wxDC& dc, int row, int col, wxCoord square_size)
 {
-    
-    if(fen_handler->get_piece()[row*8+col]==nullptr)
+    if(fen_shared.get()->get_piece()[row*8+col]==nullptr)
     {
         return;
     }
-    
+
     wxCoord x= col * square_size;
     wxCoord y= row * square_size;
-
+    
     dc.DrawBitmap(chess_piece_bitmaps[
-        fen_handler->get_piece()[row*8+col]->get_name_piece()],x,y,true);
+        fen_shared.get()->get_piece()[row*8+col]->get_name_piece()],x,y,true);
 }
 
 void Draw_board::render_piece()
@@ -107,12 +104,14 @@ void Draw_board::render_piece()
     { 
         //Percorso del file:
         std::string path = "/home/marco/Documenti/Visual_Studio_Code_esercizi/es13Creare_wxBitmap/image/"+std::string(1,piece)+".png";
-
+        
         //Verifico il caricamento dell'immagine:
         bool load_result = bitmap.LoadFile(path,wxBITMAP_TYPE_PNG);
         
         int square_size= GetClientSize().GetWidth()/8;
         //wxLogMessage("square size: %d",square_size);
+
+        
 
         //Dimensiona immagine 100x100
         if(load_result && bitmap.IsOk())
@@ -137,16 +136,18 @@ void Draw_board::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
+
 Draw_board::~Draw_board()
 {
+    
     delete game_movement;
     game_movement=nullptr;
 
     delete chess_handler;
     chess_handler=nullptr;
 
-    delete fen_handler;
-    fen_handler=nullptr;
+    //delete fen_handler;
+    //fen_handler=nullptr;
 
     delete mouse_handler;
     mouse_handler=nullptr;

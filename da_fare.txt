@@ -1,2 +1,11 @@
 Problema: 
-creare e gestire eventi mouse per i pezzi
+Capire perchè nella classe handler_fen il get_piece punta sempre a qualcosa, 
+forse perchè faccio puntare anche se non c'è un char? 
+forse perchè prendo dati fittizzi? bo non saprei cosa dirti big 
+
+cmake -DCMAKE_BUILD_TYPE=Debug ..                       Per creare la cartella per 
+                                                        debuggare con Valgrind
+
+
+valgrind --leak-check=full --track-origins=yes ./w
+                                                        Fa partire il memcheck

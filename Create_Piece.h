@@ -24,6 +24,8 @@ public:
     //Getter
     King* get_white_king();
     King* get_black_king();
+
+    ~Create_Piece();
 };
 
 

@@ -8,7 +8,7 @@
 class Bishop: public Piece
 {
 private:
-    /* data */
+    /* data */   
 public:
     Bishop(int position, char character);
     

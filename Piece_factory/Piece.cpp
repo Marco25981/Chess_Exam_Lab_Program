@@ -50,7 +50,7 @@ std::map<int,std::vector<int>> Piece::get_map_path() const
 
 bool Piece::is_legal_move(int square) const
 {
-    for(int move=0; move!=this->legal_moves.size();move++)
+    for(std::size_t move=0; move!=this->legal_moves.size();move++)
     {
         if(square==this->legal_moves[move])
         {
@@ -138,8 +138,22 @@ Piece::Piece(int pos_square, char c)
     
     //Inizializzo tutti gli attributi privati
     //serve per stringa FIN
-    std::map<char,Character> mp_character;
-    this->name_piece=mp_character[c];
+    std::map<char,Character> mp_character=
+    {
+        {'P',PAWN},{'R',ROCK},{'B',BISHOP},
+        {'N',KNIGHT},{'Q',QUEEN},{'K',KING}
+    };
+    char upper_c=toupper(c);
+    if(mp_character.count(upper_c))
+    {
+        this->type_piece=mp_character[upper_c];
+    }
+    else
+    {
+        wxLogMessage("ERRORE NEL COSTRUTTORE DI PIECE");
+        //this->type_piece='bo';
+    }
+    //this->name_piece=mp_character[c];
     
     //Inizializzo moved a false pk non ho ancora mosso
     this->is_moved=false;   
@@ -281,7 +295,7 @@ void Piece::add_legal_move(int square)
 
 void Piece::remove_legal_move(int square)
 {
-    for(int pos=0; pos!=this->legal_moves.size(); pos++)
+    for(std::size_t pos=0; pos!=this->legal_moves.size(); pos++)
     {
         if(this->legal_moves[pos]==square)
         {

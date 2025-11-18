@@ -3,6 +3,7 @@
 
 #include "start/MyProjectBase.h"
 
+#include <memory>
 #include <wx/wx.h>
 #include <map>
 #include <wx/bitmap.h>
@@ -31,9 +32,10 @@ private:
     //Mappa che serve a disegnare i pezzi
     std::map<char,wxBitmap> chess_piece_bitmaps;
 
+    std::shared_ptr<Handle_Fen_String> fen_shared;
     Movement_Piece* game_movement=nullptr;
     Handle_Chessboard* chess_handler=nullptr;
-    Handle_Fen_String* fen_handler=nullptr;
+    //Handle_Fen_String* fen_handler=nullptr;
     Handle_Mouse_Input* mouse_handler=nullptr;
 
 public:

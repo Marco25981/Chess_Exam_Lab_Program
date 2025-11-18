@@ -71,3 +71,8 @@ King* Create_Piece::get_white_king()
 {
     return white_king;
 }
+
+Create_Piece::~Create_Piece()
+{
+    
+}

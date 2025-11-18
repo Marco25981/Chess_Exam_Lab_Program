@@ -7,3 +7,4 @@ build
 #ignoro la cartella di vscode così CLion compila senza problemi
 .vscode
 .gitignore
+build_debug

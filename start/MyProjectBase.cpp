@@ -16,9 +16,6 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	wxBoxSizer* bSizer1;
 	bSizer1 = new wxBoxSizer( wxVERTICAL );
 
-	btn_bitmap = new wxButton( this, ID_BITMAP, _("bitmap"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer1->Add( btn_bitmap, 0, wxALL, 5 );
-
 	btn_board = new wxButton( this, ID_BOARD, _("disegna scacchiera"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer1->Add( btn_board, 0, wxALL, 5 );
 
@@ -45,5 +42,4 @@ MyPanel1::MyPanel1( wxWindow* parent, wxWindowID id, const wxPoint& pos, const w
 
 MyPanel1::~MyPanel1()
 {
-	
 }

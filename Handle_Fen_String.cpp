@@ -2,12 +2,13 @@
 
 Handle_Fen_String::Handle_Fen_String()
     :create_ptr(new Create_Piece())
+    
 {
-    //wxLogMessage("Entro nel costruttore di Handle_Fen_String");
-    /*if(create_ptr)
+    piece=new Piece*[64];
+    for(int i=0; i<64; ++i)
     {
-        wxLogMessage("create_ptr è inizializzato");
-    }*/
+        piece[i]=nullptr;
+    }
 }
 
 void Handle_Fen_String::fen_string_stuff()
@@ -20,27 +21,18 @@ void Handle_Fen_String::fen_string_stuff()
 
 void Handle_Fen_String::set_board_fenstring(std::string fen_string)
 {
-    //wxLogMessage("Entro in set_board");
-    
+    std::string board_fen_string=fen_string.substr(0,fen_string.find(" "));
+
     for(int i=0; i<64; i++)
     {
         piece[i]=nullptr;
-
     }
-
-    //Prendo la fen per la schacchiera:
-    std::string board_fen_string=fen_string.substr(0,fen_string.find(" "));
-    //wxString eila=board_fen_string;
-    //wxLogMessage("stringa dentro board_fen_string: %s",eila);
     
     int row=0;
     int col=0;
 
     for(char set_board : board_fen_string)
     {
-        //wxString aola=set_board;
-        //wxLogMessage("dentro al for set_board assume: %s",aola);
-        //rnbqkbnr/pppppppp/8/8/PPPPPPPP/RNBQKBNR
         if(set_board=='/')
         {
             row++;
@@ -50,7 +42,6 @@ void Handle_Fen_String::set_board_fenstring(std::string fen_string)
         {
             if(std::isdigit(set_board))    //Controllo se ci sono numeri
             {
-                //wxLogMessage("entro dove ci sono i numeri nella stringa");
                 int conv=set_board-'0'; //Nella conversione ASCII per avere 8 devo sottrare
                                         //il valore ASCII di 8 - il valore ASCII di 0 
                 col+=conv;
@@ -61,14 +52,12 @@ void Handle_Fen_String::set_board_fenstring(std::string fen_string)
                 //Creazione e posizionamento dei pezzi
                 piece[row*8+col]=create_ptr->create_piece(set_board,row*8+col);
                 piece[row*8+col]->set_name_piece(set_board);
-                /*wxString abc=piece[row*8+col]->get_name_piece();
-                wxLogMessage("abc contiene questo nome di pezzo: %s",abc);
-                */
-                col++;
+                col++;                
             }
-        }
-        
+        }        
     }
+    
+    
 }
 
 
@@ -103,8 +92,8 @@ std::string Handle_Fen_String::generate_fen_string()
                 }
                 
                 //E poi ovviamente inserisco il pezzo puntato.
+                //fen_string+=piece[row*8+col]->get_name_piece();
                 fen_string+=piece[row*8+col]->get_name_piece();
-
             }
         }
 
@@ -122,11 +111,6 @@ std::string Handle_Fen_String::generate_fen_string()
         }
     }
 
-    //TODO: Migliorare la generazione della fen con altre cose se possibile
-    
-    //Esempio fare un textctrl che stampa ogni volta la posizione di tutto insomma dai te lo
-    //devo spiegare io? no....
-    
     return fen_string;
 }
 
@@ -146,14 +130,22 @@ Piece** Handle_Fen_String::get_piece()
     return piece;
 }
 
+
+
 Handle_Fen_String::~Handle_Fen_String()
 {
+    
     delete create_ptr;
     create_ptr=nullptr;
 
-    for(int i=0; i<64; i++)
+    for(int i=0; i<64; ++i)
     {
-        piece[i]=nullptr;
-        delete piece[i];        
+        if(piece[i]!=nullptr)
+        {
+            delete piece[i];
+            piece[i]=nullptr;   
+        }
+        
     }
+    delete[] piece;
 }

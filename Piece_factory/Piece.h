@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <wx/wx.h>
 
     //IDENTIFICARE COLORE SQUADRA
     enum Color
