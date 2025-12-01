@@ -6,7 +6,7 @@ Handle_Mouse_Input::Handle_Mouse_Input(Draw_board* ptr,
      fen_smart(fen),
      handle_chessboard(new Handle_Chessboard())    
 {    
-
+    
 }
 
 void Handle_Mouse_Input::onMouseLeftDown(wxMouseEvent& event)
@@ -26,27 +26,6 @@ void Handle_Mouse_Input::onMouseLeftDown(wxMouseEvent& event)
 
     Piece *piece_ptr=fen_smart.get()->get_piece()[clicked_row*8+clicked_col];
     
-    /*if(piece_ptr!=nullptr)
-    {
-        wxLogMessage(wxT("piece_ptr punta a qualcosa"));
-    }
-    else
-        wxLogMessage(wxT("piece_ptr punta a una casella nullptr"));
-
-    if(piece_ptr)
-    {
-        if(piece_ptr->get_color()!=handle_chessboard->get_turn())
-        {
-            wxLogMessage(wxT("Non è il loro turno"));
-            
-        }
-        else
-        {
-            wxLogMessage(wxT("È il loro turno"));
-        }
-    }*/
-    
-    
     is_select_piece=true;
     
     select_piece=clicked_row*8+clicked_col;
@@ -54,7 +33,8 @@ void Handle_Mouse_Input::onMouseLeftDown(wxMouseEvent& event)
     //wxLogMessage(wxT("Il pezzo è selezionato? %d"),is_select_piece);
     //wxLogMessage(wxT("Il pezzo selezionato è della casella: %d"),select_piece);
 
-    handle_piece=fen_smart.get()->get_piece()[select_piece];  
+    handle_piece=fen_smart.get()->get_piece()[select_piece]; 
+    
 }
 
 void Handle_Mouse_Input::onMouseLeftUp(wxMouseEvent& event)
@@ -68,9 +48,19 @@ bool Handle_Mouse_Input::get_is_select_piece() const
     return is_select_piece;
 }
 
+void Handle_Mouse_Input::set_is_select_piece(bool s)
+{
+    is_select_piece=s;
+}
+
 int Handle_Mouse_Input::get_selected_piece() const
 {
     return select_piece;
+}
+
+Piece* Handle_Mouse_Input::get_handle_piece() const
+{
+    return handle_piece;
 }
 
 Handle_Mouse_Input::~Handle_Mouse_Input()

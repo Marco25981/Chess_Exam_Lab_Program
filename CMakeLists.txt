@@ -18,6 +18,7 @@ add_executable(${PROJECT_NAME}
     Movement_Piece.cpp
     Create_Piece.cpp
     Handle_Mouse_Input.cpp
+    Move.cpp
 )
 # Richiedi wxWidgets
 find_package(wxWidgets REQUIRED COMPONENTS core base)

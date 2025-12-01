@@ -21,7 +21,7 @@ private:
 public:
     Handle_Fen_String();
     
-    void fen_string_stuff();
+    
     
     //Funzione che serve all'inizio a far posizionare i pezzi
     void set_board_fenstring(std::string fen_string);

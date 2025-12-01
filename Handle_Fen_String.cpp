@@ -9,10 +9,7 @@ Handle_Fen_String::Handle_Fen_String()
     {
         piece[i]=nullptr;
     }
-}
 
-void Handle_Fen_String::fen_string_stuff()
-{
     //wxLogMessage("Entro in fen_string_stuff");
     fen_string="rnbqkbnr/pppppppp/8/8/PPPPPPPP/RNBQKBNR - w KQkq - 0 1";
     //Imposto la scacchiera alla fase iniziale

@@ -34,7 +34,11 @@ public:
 
     /*----- INIZIO GETTER: ---------*/
     bool get_is_select_piece() const;
+    void set_is_select_piece(bool select);
+
     int get_selected_piece() const;
+
+    Piece* get_handle_piece() const;
     /*----- FINE GETTER:   ---------*/
 
     ~Handle_Mouse_Input();
