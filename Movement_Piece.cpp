@@ -5,18 +5,20 @@ Movement_Piece::Movement_Piece(Draw_board* board,
     :draw(board),
     fen_shared(fen)
 {  
-    move=new Move();
+    
 }
 
 void Movement_Piece::handle_move(int from, int to)
 {
-    move->set_from_square(from);
-    move->set_to_square(to);
+    //Creo la nuova mossa:
+    Move move;
+    move.set_from_square(from);
+    move.set_to_square(to);
 
     //Gestisco la legalità dei pezzi:
-    move->set_piece_status(fen_shared.get()->get_piece()[move->get_from_square()]);
+    move.set_piece_status(fen_shared.get()->get_piece()[move.get_from_square()]);
 
-    if(move->get_piece_status()->is_legal_move(move->get_to_square()))
+    if(move.get_piece_status()->is_legal_move(move.get_to_square()))
     {
         wxLogMessage(wxT("Mossa non legale"));
     }
@@ -24,14 +26,17 @@ void Movement_Piece::handle_move(int from, int to)
     this->draw_counter++;
 
     //Gestisco la cattura:
-    if(fen_shared.get()->get_piece()[move->get_to_square()]!=nullptr)
+    if(fen_shared.get()->get_piece()[move.get_to_square()]!=nullptr)
     {
         //puntatore al pezzo catturato andrà al to_square:
-        move->set_piece_captured(fen_shared.get()->get_piece()[move->get_to_square()]);
+        move.set_piece_captured(fen_shared.get()->get_piece()[move.get_to_square()]);
+        
         //Voglio sapere che tipo di carattere è....
-        move->set_character_captured(fen_shared.get()->get_piece()[move->get_to_square()]->get_name_piece());
+        move.set_character_captured(fen_shared.get()->get_piece()[move.get_to_square()]->get_name_piece());
+        
         //elimino il pezzo puntato dal carattere ucciso:
-        delete fen_shared.get()->get_piece()[move->get_to_square()];
+        delete fen_shared.get()->get_piece()[move.get_to_square()];
+        
         //riporto a zero il contatore del pareggio pk se mangio reset
         this->draw_counter=0;
     }
@@ -39,19 +44,19 @@ void Movement_Piece::handle_move(int from, int to)
     else
     {
         //Metto piece_captured=nullptr, per forza non mangia quindi è nullptr
-        move->set_piece_captured(nullptr);
+        move.set_piece_captured(nullptr);
         //il personaggio catturato sarà ovviamente vuoto:
-        move->set_character_captured(' ');
+        move.set_character_captured(' ');
     }
-    fen_shared.get()->get_piece()[move->get_to_square()]=move->get_piece_status();
-    fen_shared.get()->get_piece()[move->get_from_square()]=nullptr;
+    fen_shared.get()->get_piece()[move.get_to_square()]=move.get_piece_status();
+    fen_shared.get()->get_piece()[move.get_from_square()]=nullptr;
 
-    if(move->get_piece_status()->is_pawn())
+    if(move.get_piece_status()->is_pawn())
     {
         this->draw_counter=0;
     }
-    move->get_piece_status()->set_square(move->get_to_square());
-    move->get_piece_status()->set_ismoved(true);  
+    move.get_piece_status()->set_square(move.get_to_square());
+    move.get_piece_status()->set_ismoved(true);  
 }
 
 void Movement_Piece::update_moves_all_piece()

@@ -6,7 +6,7 @@ Draw_board::Draw_board(wxFrame* parent)
         chess_handler(new Handle_Chessboard()),
         fen_shared(new Handle_Fen_String()),
         game_movement(new Movement_Piece(this,fen_shared)),
-        mouse_handler(new Handle_Mouse_Input(this,fen_shared))           
+        mouse_handler(new Handle_Mouse_Input(this,fen_shared,game_movement,chess_handler))           
     {
         //Rappresentazione dei pezzi:
         render_piece();
@@ -66,15 +66,19 @@ void Draw_board::draw_squares(wxDC& dc, int row, int col, wxCoord square_size)
 
     dc.SetPen(*wxTRANSPARENT_PEN);
 
-    //Colora la casella selezionata
-    if(mouse_handler->get_is_select_piece())
+    if(mouse_handler->get_handle_piece()!=nullptr)
     {
-        if(mouse_handler->get_selected_piece()==row*8+col)
+        if(mouse_handler->get_is_select_piece())
         {
-            square_color=wxColor(50,50,50);
-            dc.SetPen(wxPen(wxColor(0,0,0),2));     
+            if(mouse_handler->get_selected_piece()==row*8+col)
+            {
+                square_color=wxColor(50,50,50);
+                dc.SetPen(wxPen(wxColor(0,0,0),2));     
+            }
         }
     }
+    //Colora la casella selezionata
+    
     
     
     dc.SetBrush(square_color);
@@ -115,7 +119,7 @@ void Draw_board::render_piece()
         bool load_result = bitmap.LoadFile(path,wxBITMAP_TYPE_PNG);
         
         int square_size= GetClientSize().GetWidth()/8;
-
+       
         //Dimensiona immagine 100x100
         if(load_result && bitmap.IsOk())
         {

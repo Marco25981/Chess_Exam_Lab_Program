@@ -23,6 +23,8 @@
     e facendo le somme trovo anche le diagonali.
 */
 
+class Handle_Mouse_Input;
+
 class Draw_board: public MyPanel1
 {
 private:

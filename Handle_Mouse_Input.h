@@ -7,6 +7,8 @@
 #include "Piece_factory/Piece.h"
 #include "Handle_Fen_String.h"
 #include "Handle_Chessboard.h"
+#include "Movement_Piece.h"
+#include "Draw_board.h"
 
 class Draw_board;   //class declaration perchè se faccio classico include mi entra nel
                     //famosissimo loop e scoppia tutto il programma
@@ -23,9 +25,13 @@ private:
     Draw_board* mouse_ptr=nullptr;
     Piece* handle_piece=nullptr;  
     Handle_Chessboard* handle_chessboard=nullptr;
+    Movement_Piece* handle_movement=nullptr;
+
 public:
     Handle_Mouse_Input(Draw_board* ptr,
-        std::shared_ptr<Handle_Fen_String> fen);
+        std::shared_ptr<Handle_Fen_String> fen,
+        Movement_Piece* move,
+        Handle_Chessboard* chess);
 
     /*----- EVENTI DEL MOUSE -------*/
     void onMouseLeftUp(wxMouseEvent& event);

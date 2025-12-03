@@ -29,8 +29,6 @@ public:
 
     void handle_move(int from, int to);
     void update_moves_all_piece();
-    //void set_enpassant_square();
-    //void add_move_to_stack(Move *m);
 };
 
 #endif //MOVEMENT_PIECE_H

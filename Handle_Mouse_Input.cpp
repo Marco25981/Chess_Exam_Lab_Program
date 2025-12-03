@@ -1,10 +1,13 @@
 #include "Handle_Mouse_Input.h"
 
 Handle_Mouse_Input::Handle_Mouse_Input(Draw_board* ptr,
-    std::shared_ptr<Handle_Fen_String> fen)
+    std::shared_ptr<Handle_Fen_String> fen,
+    Movement_Piece* move,
+    Handle_Chessboard* chess)
     :mouse_ptr(ptr),    
      fen_smart(fen),
-     handle_chessboard(new Handle_Chessboard())    
+     handle_movement(move),
+     handle_chessboard(chess)    
 {    
     
 }
@@ -34,12 +37,33 @@ void Handle_Mouse_Input::onMouseLeftDown(wxMouseEvent& event)
     //wxLogMessage(wxT("Il pezzo selezionato è della casella: %d"),select_piece);
 
     handle_piece=fen_smart.get()->get_piece()[select_piece]; 
+    mouse_ptr->Refresh();
     
 }
 
 void Handle_Mouse_Input::onMouseLeftUp(wxMouseEvent& event)
 {
-    wxLogMessage("entro in mouse_left_up");
+    //wxLogMessage(wxT("entro in onleftup"));
+    //Controllo preliminare:
+    if(!is_select_piece || select_piece==-1 || handle_piece==nullptr)
+    {
+        return;
+    }
+    //So già che square_size è 56 da Draw_board
+    int square_size=56;
+
+    //Ottengo coordinate di rilascio del mouse:
+    int release_row= mouse_x/square_size;
+    int release_col= mouse_y/square_size;
+    int release_square= release_row*8+release_col;
+
+    handle_movement->handle_move(select_piece,release_square);
+
+    is_select_piece=false;
+    handle_piece=nullptr;
+    select_piece=-1;
+
+    mouse_ptr->Refresh();
 }
 
 
@@ -65,7 +89,6 @@ Piece* Handle_Mouse_Input::get_handle_piece() const
 
 Handle_Mouse_Input::~Handle_Mouse_Input()
 {
-    delete handle_chessboard;
-    handle_chessboard=nullptr;
+
 
 }
