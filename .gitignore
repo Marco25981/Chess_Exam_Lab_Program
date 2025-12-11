@@ -6,5 +6,5 @@ build
 #Ovviamente il prof vuole CLion ma io sono stronzo e 
 #ignoro la cartella di vscode così CLion compila senza problemi
 .vscode
-.gitignore
+.idea
 build_debug

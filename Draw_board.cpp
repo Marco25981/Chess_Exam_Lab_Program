@@ -3,15 +3,16 @@
 Draw_board::Draw_board(wxFrame* parent)
     :MyPanel1(parent,6000,wxPoint(200,100)),
     //Inizializzazione dei puntatori:
-        chess_handler(new Handle_Chessboard()),
+        
         fen_shared(new Handle_Fen_String()),
-        game_movement(new Movement_Piece(this,fen_shared)),
+        chess_handler(new Handle_Chessboard(fen_shared)),
+        game_movement(new Movement_Piece(this,fen_shared,chess_handler)),
         mouse_handler(new Handle_Mouse_Input(this,fen_shared,game_movement,chess_handler))           
     {
         //Rappresentazione dei pezzi:
         render_piece();
 
-        //game_movement->update_move_pieces();
+        //game_movement->update_moves_all_piece();
         
         Bind(wxEVT_PAINT,&Draw_board::on_paint,this);
      

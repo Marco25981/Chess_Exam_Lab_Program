@@ -1,9 +1,12 @@
 #include "Handle_Mouse_Input.h"
 
-Handle_Mouse_Input::Handle_Mouse_Input(Draw_board* ptr,
+Handle_Mouse_Input::Handle_Mouse_Input
+(   
+    Draw_board* ptr,
     std::shared_ptr<Handle_Fen_String> fen,
     Movement_Piece* move,
-    Handle_Chessboard* chess)
+    Handle_Chessboard* chess
+)
     :mouse_ptr(ptr),    
      fen_smart(fen),
      handle_movement(move),
@@ -57,7 +60,9 @@ void Handle_Mouse_Input::onMouseLeftUp(wxMouseEvent& event)
     int release_col= mouse_y/square_size;
     int release_square= release_row*8+release_col;
 
-    handle_movement->handle_move(select_piece,release_square);
+    //handle_movement->handle_move(select_piece,release_square);
+
+    
 
     is_select_piece=false;
     handle_piece=nullptr;

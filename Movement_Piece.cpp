@@ -1,15 +1,21 @@
 #include "Movement_Piece.h"
 
-Movement_Piece::Movement_Piece(Draw_board* board, 
-    std::shared_ptr<Handle_Fen_String> fen) 
+Movement_Piece::Movement_Piece
+(
+    Draw_board* board, 
+    std::shared_ptr<Handle_Fen_String> fen,
+    Handle_Chessboard *chess
+) 
     :draw(board),
-    fen_shared(fen)
+    fen_shared(fen),
+    handle_chess(chess)
 {  
     
 }
 
 void Movement_Piece::handle_move(int from, int to)
 {
+    
     //Creo la nuova mossa:
     Move move;
     move.set_from_square(from);

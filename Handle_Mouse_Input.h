@@ -28,10 +28,13 @@ private:
     Movement_Piece* handle_movement=nullptr;
 
 public:
-    Handle_Mouse_Input(Draw_board* ptr,
+    Handle_Mouse_Input
+    (
+        Draw_board* ptr,
         std::shared_ptr<Handle_Fen_String> fen,
         Movement_Piece* move,
-        Handle_Chessboard* chess);
+        Handle_Chessboard* chess
+    );
 
     /*----- EVENTI DEL MOUSE -------*/
     void onMouseLeftUp(wxMouseEvent& event);

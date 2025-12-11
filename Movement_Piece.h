@@ -8,6 +8,7 @@
 
 #include "Piece_factory/Piece.h"
 #include "Handle_Fen_String.h"
+#include "Handle_Chessboard.h"
 #include "Move.h"
 
 class Draw_board;
@@ -20,12 +21,16 @@ private:
     std::stack<Move*>stack;
 
     Draw_board* draw=nullptr;
-
-    Move *move=nullptr;
+    Handle_Chessboard* handle_chess=nullptr;
 
     std::shared_ptr<Handle_Fen_String> fen_shared;
 public:
-    Movement_Piece(Draw_board* board, std::shared_ptr<Handle_Fen_String> fen);
+    Movement_Piece
+    (
+        Draw_board* board,
+        std::shared_ptr<Handle_Fen_String> fen,
+        Handle_Chessboard* chess
+    );
 
     void handle_move(int from, int to);
     void update_moves_all_piece();
