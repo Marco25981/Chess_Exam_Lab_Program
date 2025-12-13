@@ -10,10 +10,10 @@ private:
 public:
     Pawn(int pos, char character);
     
-    void update_legal_moves(Piece*board[64]) override;
+    void update_legal_moves(std::shared_ptr<Handle_Fen_String> ptr_smart) override;
 
-    void handle_movement(Piece* board[64], std::vector<int>& legal_moves);
-    void handle_offensive(Piece* board[64], std::vector<int>& legal_moves);
+    void handle_movement(Piece** ptr, std::vector<int>& legal_moves);
+    void handle_offensive(Piece** ptr, std::vector<int>& legal_moves);
     void handle_en_passant(int square);
 };
 

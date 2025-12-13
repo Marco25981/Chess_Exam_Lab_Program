@@ -1,4 +1,5 @@
 #include "Pawn.h"
+#include "../../Handle_Fen_String.h"
 
 Pawn::Pawn(int pos, char character)
     :Piece(pos,character)
@@ -7,19 +8,21 @@ Pawn::Pawn(int pos, char character)
     }
 
 /*---------FUNZIONE VIRTUALE------------------*/
-void Pawn::update_legal_moves(Piece*board[64])
+void Pawn::update_legal_moves(std::shared_ptr<Handle_Fen_String> ptr_smart)
 {
     std::vector<int> legal_moves={};
-    
-    this->handle_movement(board,legal_moves);
-    this->handle_offensive(board,legal_moves);
+
+    const auto& piece= ptr_smart.get()->get_piece();
+
+    this->handle_movement(piece,legal_moves);
+    this->handle_offensive(piece,legal_moves);
     
     set_legal_moves(legal_moves);
 }
 /*---------FINE FUNZIONE VIRTUALE-------------*/
 
 /*---------FUNZIONI DEL PEDONE-----------------*/
-void Pawn::handle_movement(Piece*board[64], std::vector<int>& legal_moves)
+void Pawn::handle_movement(Piece** ptr, std::vector<int>& legal_moves)
 {
     //Ovviamente il pedone si può muovere di una casella avanti 
     int directions[2]{8,16};
@@ -41,7 +44,7 @@ void Pawn::handle_movement(Piece*board[64], std::vector<int>& legal_moves)
 
         if(square>0 && square<64)
         {
-            if(board[square]==nullptr)
+            if(ptr[square]==nullptr)
             {
                 legal_moves.push_back(square);
             }
@@ -51,7 +54,7 @@ void Pawn::handle_movement(Piece*board[64], std::vector<int>& legal_moves)
     }
 }
 
-void Pawn::handle_offensive(Piece*board[64], std::vector<int>& legal_moves)
+void Pawn::handle_offensive(Piece**ptr, std::vector<int>& legal_moves)
 {
     
     int directions[2]{7,9};
@@ -66,7 +69,7 @@ void Pawn::handle_offensive(Piece*board[64], std::vector<int>& legal_moves)
 
         if(square>=0 && square < 64 && abs(this->get_col()- square %8)<=1)
         {
-            if(board[square] != nullptr && this->get_color()!=board[square]->get_color())
+            if(ptr[square] != nullptr && this->get_color()!=ptr[square]->get_color())
             {
                 legal_moves.push_back(square);
                 this->get_map_path()[directions[i]].push_back(square);

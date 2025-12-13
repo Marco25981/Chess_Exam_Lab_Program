@@ -6,7 +6,10 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <memory>
 #include <wx/wx.h>
+
+class Handle_Fen_String;
 
     //IDENTIFICARE COLORE SQUADRA
     enum Color
@@ -121,12 +124,25 @@ public:
     /*-----------FUNZIONI-----------------*/
 
         /*Inizio: Gestione degli spostamenti:*/
-        void diagonal_move(Piece* board[64], std::vector<int> &legal_moves);
-        void straight_move(Piece* board[64], std::vector<int> &legal_moves);
+        void diagonal_move
+        (
+            Piece** ptr, 
+            std::vector<int> &legal_moves
+        );
+        
+        void straight_move
+        (
+            Piece** ptr, 
+            std::vector<int> &legal_moves
+        );
         /*Fine: Gestione degli spostamenti:*/
 
         //Controlla il percorso del re
-        std::vector<int> check_is_king(Piece* board[64], Piece *King);
+        std::vector<int> check_is_king
+        (
+            std::shared_ptr<Handle_Fen_String> ptr_smart, 
+            Piece *King
+        );
     
         /*Inizio: Gestione delle mosse legali che puoi fare*/
         void add_legal_move(int square);
@@ -137,7 +153,10 @@ public:
     
     /*-----------FUNZIONI VIRTUALI----------*/    
         //Aggiornare le mosse legali per i pezzi specifici 
-        virtual void update_legal_moves(Piece*board[64])=0;    
+        virtual void update_legal_moves
+        (
+            std::shared_ptr<Handle_Fen_String> ptr_smart
+        )=0;    
     /*-----------FINE FUNZIONI VIRTUALI----------*/
 
     virtual ~Piece()= default;

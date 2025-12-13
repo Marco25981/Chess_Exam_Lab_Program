@@ -10,9 +10,9 @@ private:
 public:
     Knight(int pos, char character);
     
-    void update_legal_moves(Piece*board[64]) override;
+    void update_legal_moves(std::shared_ptr<Handle_Fen_String> ptr_smart) override;
 
-    void handle_movement(Piece*board[64], std::vector<int>& legal_moves);
+    void handle_movement(Piece**board, std::vector<int>& legal_moves);
 
 
 

@@ -16,7 +16,7 @@ public:
 
     /*----Funzione virtuale aggiornamento----*/
     
-    void update_legal_moves(Piece*board[64]) override;
+    void update_legal_moves(std::shared_ptr<Handle_Fen_String> ptr_smart) override;
     
     /*----Fine funzione virtuale aggiornamento----*/
     

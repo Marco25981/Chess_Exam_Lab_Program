@@ -1,4 +1,5 @@
 #include "Piece.h"
+#include "../Handle_Fen_String.h"
 
 /*Getter:*/
 
@@ -118,15 +119,23 @@ void Piece::set_legal_moves(std::vector<int> new_legal_moves)
 
 /*Costruttore*/
 
-Piece::Piece(int pos_square, char c)
-{
-    this->square=pos_square;
+Piece::Piece(int pos_square,char c)
 
-    this->row=square/8;
-    this->coloum=square%8;
+   :row(pos_square/8),
+    coloum(pos_square%8),
+    square(pos_square),
+    name_piece(c)
     
-    this->name_piece=c;
+    
+{
+    //this->square=pos_square;
 
+    //this->row=square/8;
+    //this->coloum=square%8;
+    
+    //this->name_piece=c;
+    //wxLogMessage("Square: [%d] - Row: [%d] - Coloum: [%d] - Name_Piece: [%c]",square,row,coloum,name_piece);
+    
     //Controllo se è maiuscolo o no...
     if(isupper(c))
         this->color=WHITE;
@@ -160,13 +169,14 @@ Piece::Piece(int pos_square, char c)
 
 /*Funzioni*/
 
-void Piece::diagonal_move(Piece* board[64],std::vector<int> &legal_moves)
+void Piece::diagonal_move(Piece** ptr,std::vector<int> &legal_moves)
 {
     //posizioni delle quattro diagonali della cella avanzato di 1 insomma   
     int diagonal[4]{9,7,-9,-7};
+
     
+
     //posizione delle quattro diagonali della cella in totale
-    
     int end_board_diagonal[4]
     {
         std::min(this->row,this->coloum),
@@ -181,28 +191,35 @@ void Piece::diagonal_move(Piece* board[64],std::vector<int> &legal_moves)
     {
         //parte dal quadrato selezionato
     
-        this->square=square;
+        //this->square=square;
+        int current_square=this->square;
         //registro le diagonali singole nella mappa
     
         this->map_path[diagonal[i]]={}; //L'ho messo perchè serve a resettare il vettore
-        for(int j=0;j<end_board_diagonal[4];j++)
+        for(int j=0;j<end_board_diagonal[i];j++)
         {
             //Per ogni square:
             //somma al valore della diagonale singola
-            square+=diagonal[i];
+            current_square+=diagonal[i];
+
+            if(current_square<0 || current_square>= 64)
+            {
+                break; //Casella fuori dalla scacchiera 
+            }
 
             //Se il pezzo è dello stesso colore allora stoppati
-            if(board[square]!=nullptr && this->color==board[square]->get_color())
+            if(ptr[current_square]!=nullptr && this->color==ptr[current_square]->get_color())
             {
+                //ptr_smart.get()->get_piece()[square]
                 break;
             }
 
             //Se il quadrato è vuoto oppure del colore opposto aggiungi alle mosse legali
-            legal_moves.push_back(square);
-            this->map_path[diagonal[i]].push_back(square);
+            legal_moves.push_back(current_square);
+            this->map_path[diagonal[i]].push_back(current_square);
 
             //Se il quadrato è appartenuto a un pezzo di colore opposto allora stoppati
-            if(board[square]!=nullptr&& this->color!=board[square]->get_color())
+            if(ptr[current_square]!=nullptr&& this->color!=ptr[current_square]->get_color())
             {
                 break;
             }
@@ -212,7 +229,7 @@ void Piece::diagonal_move(Piece* board[64],std::vector<int> &legal_moves)
     }
 }
 
-void Piece::straight_move(Piece* board[64],std::vector<int> &legal_moves)
+void Piece::straight_move(Piece**ptr,std::vector<int> &legal_moves)
 {
     //Singolo spostamento dritto
     int single_straight[4]={-1,-8,+8,1};
@@ -229,26 +246,33 @@ void Piece::straight_move(Piece* board[64],std::vector<int> &legal_moves)
     for(int i=0; i<4; i++)
     {
         //Inzio mettendo lo square dove si trova il pezzo
-        this->square=square;
-        //Registro le possibili mosse dritte
-        this->map_path[single_straight[4]]={};
+        int current_square=this->square;
 
-        for(int j=0; j<end_board_straight[4]; j++)
+        //Registro le possibili mosse dritte
+        this->map_path[single_straight[i]]={};
+
+        for(int j=0; j<end_board_straight[i]; j++)
         {
             //sommo la posizione con le mosse future diritte
-            square+=single_straight[i];
+            current_square+=single_straight[i];
+
+            if(current_square<0 || current_square>= 64)
+            {
+                break; //Casella fuori dalla scacchiera 
+            }
+            
             //Se c'è qualcosa e c'è un pezzo dello stesso colore allora...
-            if(board[square]!=nullptr && this->color==board[square]->color)
+            if(ptr[current_square]!=nullptr && this->color==ptr[current_square]->color)
             {
                 //rompi il ciclo
                 break;
             }
             //Allora aggiungi il blocco alle mosse legali...
-            legal_moves.push_back(square);
-            this->map_path[single_straight[i]].push_back(square);
+            legal_moves.push_back(current_square);
+            this->map_path[single_straight[i]].push_back(current_square);
             
             //Se c'è qualcosa e c'è un pezzo del colore diverso allora...
-            if(board[square]!=nullptr && this->color!=board[square]->color)
+            if(ptr[current_square]!=nullptr && this->color!=ptr[current_square]->color)
             {
                 //rompi il ciclo
                 break;
@@ -258,8 +282,9 @@ void Piece::straight_move(Piece* board[64],std::vector<int> &legal_moves)
 }
 
 //Controlla il percorso del re:
-std::vector<int> Piece::check_is_king(Piece* board[64], Piece *King)
+std::vector<int> Piece::check_is_king(std::shared_ptr<Handle_Fen_String> ptr_smart, Piece *King)
 {
+    const auto& piece= ptr_smart.get()->get_piece();
     //Loop attraverso tutte le direzioni della mappa
     for(auto const &i : this->map_path)
     {
@@ -269,7 +294,7 @@ std::vector<int> Piece::check_is_king(Piece* board[64], Piece *King)
         for(int square :percorso)
         {
             //Se nel quadrato del percorso trovi il Re
-            if(board[square]==King)
+            if(piece[square]==King)
             {
                 //Riportami la posizione del percorso sulla mappa
                 return this->map_path[direzione];

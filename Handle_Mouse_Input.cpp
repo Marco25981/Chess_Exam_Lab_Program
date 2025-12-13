@@ -32,6 +32,30 @@ void Handle_Mouse_Input::onMouseLeftDown(wxMouseEvent& event)
 
     Piece *piece_ptr=fen_smart.get()->get_piece()[clicked_row*8+clicked_col];
     
+    //Il programma capisce se il pezzo è un pedone oppure no
+    if(piece_ptr)
+    {
+        if(piece_ptr->is_pawn())
+        {
+            const auto& move=piece_ptr->get_legal_moves();  //interessante accorciare codice
+
+            wxLogMessage(wxT("Il pezzo selezionato è un pedone"));
+            for
+            (
+                auto i=move.begin();
+                i!=move.end();
+                ++i
+            )
+            {
+                wxLogMessage(wxT("Le mosse disponibili del pedone sono: %d"),*i);
+            }
+            
+        }
+            
+        
+    }
+    
+
     is_select_piece=true;
     
     select_piece=clicked_row*8+clicked_col;
@@ -46,7 +70,6 @@ void Handle_Mouse_Input::onMouseLeftDown(wxMouseEvent& event)
 
 void Handle_Mouse_Input::onMouseLeftUp(wxMouseEvent& event)
 {
-    //wxLogMessage(wxT("entro in onleftup"));
     //Controllo preliminare:
     if(!is_select_piece || select_piece==-1 || handle_piece==nullptr)
     {
@@ -60,6 +83,7 @@ void Handle_Mouse_Input::onMouseLeftUp(wxMouseEvent& event)
     int release_col= mouse_y/square_size;
     int release_square= release_row*8+release_col;
 
+    
     //handle_movement->handle_move(select_piece,release_square);
 
     

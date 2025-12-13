@@ -1,4 +1,5 @@
 #include "Knight.h"
+#include "../../Handle_Fen_String.h"
 
 Knight::Knight(int pos, char character)
     :Piece(pos,character)
@@ -7,13 +8,16 @@ Knight::Knight(int pos, char character)
     }
 
 
-void Knight::update_legal_moves(Piece*board[64])
+void Knight::update_legal_moves(std::shared_ptr<Handle_Fen_String> ptr_smart)
 {
     std::vector<int> legal_moves {};
+
+    const auto& board=ptr_smart.get()->get_piece();
+    
     handle_movement(board,legal_moves);
 }
 
-void Knight::handle_movement(Piece*board[64],std::vector<int>&legal_moves)
+void Knight::handle_movement(Piece**board,std::vector<int>&legal_moves)
 {
     int directions[8]={17,15,10,-6,6,-10,-15,-17};
     

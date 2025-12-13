@@ -67,11 +67,12 @@ void Movement_Piece::handle_move(int from, int to)
 
 void Movement_Piece::update_moves_all_piece()
 {
+    const auto& piece=fen_shared.get()->get_piece();
     for(int i=0; i<64; ++i)
     {
-        if(fen_shared.get()->get_piece()[i])
+        if(piece[i])
         {
-            fen_shared.get()->get_piece()[i]->update_legal_moves(fen_shared.get()->get_piece());
+            piece[i]->update_legal_moves(fen_shared);
         }
     }
 }

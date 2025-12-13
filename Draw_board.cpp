@@ -12,7 +12,7 @@ Draw_board::Draw_board(wxFrame* parent)
         //Rappresentazione dei pezzi:
         render_piece();
 
-        //game_movement->update_moves_all_piece();
+        game_movement->update_moves_all_piece();    //qui è il problema del segfault
         
         Bind(wxEVT_PAINT,&Draw_board::on_paint,this);
      

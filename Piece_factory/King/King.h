@@ -14,16 +14,16 @@ public:
     bool get_is_check() const;
     
     //Funzione virtuale
-    void update_legal_moves(Piece*board[64]) override;
+    void update_legal_moves(std::shared_ptr<Handle_Fen_String> ptr_smart) override;
 
     //Funzioni del re
-    void handle_movement(Piece*board[64], std::vector<int> legal_moves);
+    void handle_movement(Piece**board, std::vector<int> legal_moves);
 
-    void handle_arrok(Piece*board[64], int rook_position, std::vector<Piece*>& piece_attacking);
+    void handle_arrok(Piece**board, int rook_position, std::vector<Piece*>& piece_attacking);
 
-    bool is_attack(Piece *board[64], std::vector<Piece *> &pieces, std::vector<Piece *> &pieces_attacking_king);
+    bool is_attack(Piece **board, std::vector<Piece *> &pieces, std::vector<Piece *> &pieces_attacking_king);
 
-    bool handle_king_move_check(Piece *board[64],int to_square,std::vector<Piece*> pieces_attacking_king);
+    bool handle_king_move_check(Piece **board,int to_square,std::vector<Piece*> pieces_attacking_king);
 
 
 };

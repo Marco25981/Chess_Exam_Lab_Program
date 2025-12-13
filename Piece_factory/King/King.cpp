@@ -1,4 +1,5 @@
 #include "King.h"
+#include "../../Handle_Fen_String.h"
 
 //Costruttore
 King::King(int position, char character)
@@ -14,14 +15,18 @@ bool King::get_is_check() const
 }
 
 //Funzione virtuale
-void King::update_legal_moves(Piece*board[64])
+void King::update_legal_moves(std::shared_ptr<Handle_Fen_String> ptr_smart)
 {
     std::vector<int> legal_moves={};
+
+    const auto& board= ptr_smart.get()->get_piece();
+
+    handle_movement(board,legal_moves);
 }
 
 
 //Funzione del movimento del re
-void King::handle_movement(Piece*board[64], std::vector<int> legal_moves)
+void King::handle_movement(Piece**board, std::vector<int> legal_moves)
 {
     int direction[8]={8,7,9,1,-1,-7,-8,-9};
     
@@ -44,7 +49,7 @@ void King::handle_movement(Piece*board[64], std::vector<int> legal_moves)
     }
 }
 
-void King::handle_arrok(Piece*board[64], int rook_position, std::vector<Piece*>& piece_attacking)
+void King::handle_arrok(Piece**board, int rook_position, std::vector<Piece*>& piece_attacking)
 {
     //Se il re è sotto scacco non puoi arroccare:
     if(this->get_is_check())
@@ -93,7 +98,7 @@ void King::handle_arrok(Piece*board[64], int rook_position, std::vector<Piece*>&
 
 }
 
-bool King::is_attack(Piece *board[64], 
+bool King::is_attack(Piece **board, 
                      std::vector<Piece *> &pieces, 
                      std::vector<Piece *> &pieces_attacking_king)
 {
@@ -116,7 +121,7 @@ bool King::is_attack(Piece *board[64],
     return false;
 }
 
-bool King::handle_king_move_check(Piece *board[64],
+bool King::handle_king_move_check(Piece **board,
                                   int to_square,
                                   std::vector<Piece*> pieces_attacking_king)
     {
