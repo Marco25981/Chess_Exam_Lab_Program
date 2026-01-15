@@ -34,10 +34,6 @@ void Handle_Mouse_Input::onMouseLeftDown(wxMouseEvent& event)
 
     piece_ptr=fen_smart.get()->get_piece()[position_board];
 
-    //Gestione del turno di gioco
-    if(piece_ptr && piece_ptr->get_color()!=handle_chessboard->get_turn())
-        return;
-
     handle_select_square(clicked_row,clicked_col);
     
     mouse_ptr->Refresh();  
@@ -51,7 +47,6 @@ void Handle_Mouse_Input::onMouseLeftUp(wxMouseEvent& event)
 
 void Handle_Mouse_Input::handle_select_square(int &clicked_row, int &clicked_col)
 {
-    
     if(!is_select_piece || handle_piece==nullptr)
     {
         //SONO NEL PRIMO CLICK:
@@ -76,37 +71,58 @@ void Handle_Mouse_Input::handle_select_square(int &clicked_row, int &clicked_col
     }
     else
     {
-        //SONO NEL SECONDO CLICK:
-        //Se clicco sulla stessa casella allora deseleziona tutto 
-        if(piece_ptr==handle_piece)
-        {
-            reset_attributes();
-            return;
-        }
-        //Se clicco la 2° volta su una casella con personaggio diverso ma della stessa 
-        //squadra: 
-        if(piece_ptr 
-            &&piece_ptr->get_color()==handle_chessboard->get_turn() )
-        {
-            
-            select_piece=position_board;   
-            handle_piece=piece_ptr;
-            from_square=handle_piece->get_square();
-            return;
-        }
-        //Se clicco la 2° volta su una casella vuota ma è una mossa legale per il 
-        //pezzo di partenza:
-        if(handle_piece->is_legal_move(position_board))
-        {
-            handle_movement->handle_move(from_square,position_board);
-            handle_chessboard->change_turn();
-            reset_attributes();
-        }
-        else
-            return;
-        
+    //SONO NEL SECONDO CLICK:
+    //Se clicco sulla stessa casella allora deseleziona tutto 
+    if(piece_ptr==handle_piece)
+    {
+        reset_attributes();
+        return;
     }
+    //Se clicco la 2° volta su una casella con personaggio diverso ma della stessa 
+    //squadra: 
+    if(piece_ptr 
+        &&piece_ptr->get_color()==handle_chessboard->get_turn() )
+    {
+        select_piece=position_board;   
+        handle_piece=piece_ptr;
+        from_square=handle_piece->get_square();
+        return;
+    }
+    //Se clicco la 2° volta su una casella vuota o nemico ma è una mossa legale per il 
+    //pezzo di partenza:
+    if(handle_piece->is_legal_move(position_board))
+    {
+        handle_movement->handle_move(from_square,position_board);
+        handle_chessboard->change_turn();
+        handle_movement->update_moves_all_piece();
+        handle_chessboard->handle_check_on_king_straight(fen_smart.get()->get_piece(),handle_chessboard->get_turn());
+        /*if(handle_chessboard->handle_check_on_king(fen_smart.get()->get_piece(),handle_chessboard->get_turn()))
+        {
+            wxLogMessage(wxT("Scacco"));
 
+            Color king_color;
+            if(handle_chessboard->get_turn()==WHITE)
+            {
+                king_color = BLACK;
+            }
+            else
+                king_color = BLACK;
+
+            Piece* k=handle_chessboard->find_king(fen_smart.get()->get_piece(),king_color);
+            
+            handle_movement->get_path_to_king(k);
+            //FAI UN ALTRA FUNZIONE E AGGIORNA TUTTE LE MOSSE LEGALI
+        }*/
+
+        
+
+        mouse_ptr->Refresh();
+        
+        reset_attributes();
+    }
+    else
+        return;
+    }  
 }
 
 void Handle_Mouse_Input::reset_attributes()

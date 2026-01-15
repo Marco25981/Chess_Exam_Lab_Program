@@ -14,11 +14,10 @@ public:
     
     /*------------Fine Costruttore-----------*/
 
-    /*----Funzione virtuale aggiornamento----*/
-    
+    /*----Funzioni virtuale----*/  
     void update_legal_moves(std::shared_ptr<Handle_Fen_String> ptr_smart) override;
-    
-    /*----Fine funzione virtuale aggiornamento----*/
+    void get_attack(Piece **board, std::vector<int> &attacked_squares) override;
+    /*----Fine funzione virtuale----*/
     
 };
 

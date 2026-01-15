@@ -23,6 +23,8 @@ void Handle_Fen_String::set_board_fenstring(std::string fen_string)
 
     for(int i=0; i<64; i++)
     {
+        if(piece[i])
+            delete piece[i];
         piece[i]=nullptr;
     }
     
@@ -54,8 +56,7 @@ void Handle_Fen_String::set_board_fenstring(std::string fen_string)
             }
         }        
     }
-    
-    
+    this->fen_string=fen_string;
 }
 
 
@@ -100,14 +101,19 @@ std::string Handle_Fen_String::generate_fen_string()
         if(count_no_piece>0)
         {
             fen_string+=std::to_string(count_no_piece);
-            count_no_piece=0;
+            //count_no_piece=0;
         }
         //Nella fen per dire che finisce la riga si usa '/'
-        if(row==6)
+        if(row<7)
         {
             fen_string+='/';
         }
     }
+
+    fen_string+= "w KQkq - 0 1";
+    this->fen_string=fen_string;
+    //set_board_fenstring(fen_string);
+    //add_fen_to_map(fen_string);
 
     return fen_string;
 }

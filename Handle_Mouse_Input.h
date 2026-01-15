@@ -19,7 +19,7 @@ private:
     int mouse_x, mouse_y, select_piece, from_square, to_square;
     int position_board;
 
-    bool is_select_piece;
+    bool is_select_piece, check_king;
 
     std::shared_ptr<Handle_Fen_String> fen_smart;
     
@@ -53,6 +53,7 @@ public:
 
     void handle_select_square(int &clicked_row, int &clicked_col);
     void reset_attributes();
+    
     ~Handle_Mouse_Input();
 };
 

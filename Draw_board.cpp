@@ -5,7 +5,7 @@ Draw_board::Draw_board(wxFrame* parent)
     //Inizializzazione dei puntatori:
         
         fen_shared(new Handle_Fen_String()),
-        chess_handler(new Handle_Chessboard(fen_shared)),
+        chess_handler(new Handle_Chessboard(this,fen_shared)),
         game_movement(new Movement_Piece(this,fen_shared,chess_handler)),
         mouse_handler(new Handle_Mouse_Input(this,fen_shared,game_movement,chess_handler))           
     {

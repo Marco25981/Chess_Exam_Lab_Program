@@ -18,11 +18,8 @@ private:
     Create_Piece* create_ptr=nullptr;
     Piece **piece;                   //Serve per controllare i pezzi
                                         //tramite puntatore nella scacchiera
-    
 public:
     Handle_Fen_String();
-    
-    
     
     //Funzione che serve all'inizio a far posizionare i pezzi
     void set_board_fenstring(std::string fen_string);

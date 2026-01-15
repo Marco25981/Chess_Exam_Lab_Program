@@ -103,6 +103,8 @@ void Piece::set_col(int new_col)
 void Piece::set_square(int new_square)
 {
     this->square=new_square;
+    this->row=new_square/8;
+    this->coloum=new_square%8;
 }
 
 void Piece::set_name_piece(char new_name)
@@ -125,6 +127,14 @@ void Piece::set_legal_moves(std::vector<int> new_legal_moves)
     this->legal_moves=new_legal_moves;
 }
 
+/*void Piece::set_map_path(int square_legal[i])
+{
+    //std::vector<int> initial_vector={};
+
+    map_path[square_legal[]]
+}*/
+
+
 /*Fine Setter*/
 
 /*Costruttore*/
@@ -138,14 +148,6 @@ Piece::Piece(int pos_square,char c)
     
     
 {
-    //this->square=pos_square;
-
-    //this->row=square/8;
-    //this->coloum=square%8;
-    
-    //this->name_piece=c;
-    //wxLogMessage("Square: [%d] - Row: [%d] - Coloum: [%d] - Name_Piece: [%c]",square,row,coloum,name_piece);
-    
     //Controllo se è maiuscolo o no...
     if(isupper(c))
         this->color=WHITE;
@@ -166,11 +168,11 @@ Piece::Piece(int pos_square,char c)
     {
         this->type_piece=mp_character[upper_c];
     }
-    else
+    /*else
     {
         wxLogMessage(wxT("ERRORE NEL COSTRUTTORE DI PIECE"));
     
-    }  
+    }  */
     //Inizializzo moved a false pk non ho ancora mosso
     this->is_moved=false;   
     
@@ -178,13 +180,12 @@ Piece::Piece(int pos_square,char c)
 /*Fine Costruttore*/
 
 /*Funzioni*/
-
 void Piece::diagonal_move(Piece** ptr,std::vector<int> &legal_moves)
 {
     //posizioni delle quattro diagonali della cella avanzato di 1 insomma   
-    int diagonal[4]{9,7,-9,-7};
+    int diagonal[4]{-9,-7,7,9};
 
-    
+    this->map_path[this->square]={};
 
     //posizione delle quattro diagonali della cella in totale
     int end_board_diagonal[4]
@@ -196,40 +197,41 @@ void Piece::diagonal_move(Piece** ptr,std::vector<int> &legal_moves)
     };
 
     //Creo for per le 4 diagonali
-    
     for(int i=0; i<4; i++)
     {
-        //parte dal quadrato selezionato
-    
-        //this->square=square;
-        int current_square=this->square;
-        //registro le diagonali singole nella mappa
-    
-        this->map_path[diagonal[i]]={}; //L'ho messo perchè serve a resettare il vettore
-        for(int j=0;j<end_board_diagonal[i];j++)
-        {
-            //Per ogni square:
-            //somma al valore della diagonale singola
-            current_square+=diagonal[i];
+        int current_square_move=this->square;
+                                            //Questa inizializzazione è per calcolarmi 
+                                            //le mosse che può fare il pezzo 
 
-            if(current_square<0 || current_square>= 64)
+        for(int j=0;j<end_board_diagonal[i];j++)
+            //ciclo for per le mosse, ovviamente non devo uscire dalla scacchiera
+        {
+            current_square_move+=diagonal[i];   
+                                            //Importante! qua la variabile memorizza
+                                            //le mosse legali per la diagonale[i]
+
+            if(current_square_move<0 || current_square_move>= 64)
+                //Controllino per non avere il SegFault :))))
             {
                 break; //Casella fuori dalla scacchiera 
             }
 
             //Se il pezzo è dello stesso colore allora stoppati
-            if(ptr[current_square]!=nullptr && this->color==ptr[current_square]->get_color())
+            if(ptr[current_square_move]!=nullptr && 
+                this->color==ptr[current_square_move]->get_color())
             {
-                //ptr_smart.get()->get_piece()[square]
                 break;
             }
 
             //Se il quadrato è vuoto oppure del colore opposto aggiungi alle mosse legali
-            legal_moves.push_back(current_square);
-            this->map_path[diagonal[i]].push_back(current_square);
-
+            legal_moves.push_back(current_square_move);
+            
+            //Inserisco nella map_path la mossa legale
+            this->map_path[this->square].push_back(current_square_move);
+            
             //Se il quadrato è appartenuto a un pezzo di colore opposto allora stoppati
-            if(ptr[current_square]!=nullptr&& this->color!=ptr[current_square]->get_color())
+            if(ptr[current_square_move]!=nullptr&& 
+                this->color!=ptr[current_square_move]->get_color())
             {
                 break;
             }
@@ -242,77 +244,56 @@ void Piece::diagonal_move(Piece** ptr,std::vector<int> &legal_moves)
 void Piece::straight_move(Piece**ptr,std::vector<int> &legal_moves)
 {
     //Singolo spostamento dritto
-    int single_straight[4]={-1,-8,+8,1};
+    int single_straight[4]={-8,8,-1,1};
+
+    this->map_path[this->square]={};
 
     //Spostamento dritto fino alla fine della scacchiera
     int end_board_straight[4]=
     {
         this->row,
-        this->coloum,
         7-this->row,
+        this->coloum,
         7-this->coloum
     };
 
     for(int i=0; i<4; i++)
     {
-        //Inzio mettendo lo square dove si trova il pezzo
-        int current_square=this->square;
-
         //Registro le possibili mosse dritte
-        this->map_path[single_straight[i]]={};
+        //Inizio mettendo lo square dove si trova il pezzo
+        int current_square=this->square;
+        int current_square_move=current_square;
 
         for(int j=0; j<end_board_straight[i]; j++)
         {
-            //sommo la posizione con le mosse future diritte
-            current_square+=single_straight[i];
+            current_square_move+=single_straight[i];
 
-            if(current_square<0 || current_square>= 64)
+            if(current_square_move<0 || current_square_move>= 64)
             {
                 break; //Casella fuori dalla scacchiera 
             }
             
             //Se c'è qualcosa e c'è un pezzo dello stesso colore allora...
-            if(ptr[current_square]!=nullptr && this->color==ptr[current_square]->color)
+            if(ptr[current_square_move]!=nullptr && 
+                this->color==ptr[current_square_move]->color)
             {
                 //rompi il ciclo
                 break;
             }
-            //Allora aggiungi il blocco alle mosse legali...
-            legal_moves.push_back(current_square);
-            this->map_path[single_straight[i]].push_back(current_square);
-            
-            //Se c'è qualcosa e c'è un pezzo del colore diverso allora...
-            if(ptr[current_square]!=nullptr && this->color!=ptr[current_square]->color)
-            {
-                //rompi il ciclo
-                break;
-            }
-        }
-    }
-}
 
-//Controlla il percorso del re:
-std::vector<int> Piece::check_is_king(std::shared_ptr<Handle_Fen_String> ptr_smart, Piece *King)
-{
-    const auto& piece= ptr_smart.get()->get_piece();
-    //Loop attraverso tutte le direzioni della mappa
-    for(auto const &i : this->map_path)
-    {
-        auto const &direzione=i.first;
-        auto const &percorso=i.second;
-        //Loop fino allo square del percorso
-        for(int square :percorso)
-        {
-            //Se nel quadrato del percorso trovi il Re
-            if(piece[square]==King)
+            //Allora aggiungi il blocco alle mosse legali...
+            legal_moves.push_back(current_square_move);
+            this->map_path[current_square].push_back(current_square_move);
+
+            //Se c'è qualcosa e c'è un pezzo del colore diverso allora...
+            if(ptr[current_square_move]!=nullptr && 
+                this->color!=ptr[current_square_move]->color)
             {
-                //Riportami la posizione del percorso sulla mappa
-                return this->map_path[direzione];
+                //rompi il ciclo
+                break;
             }
         }
     }
-    //Se non trovi nulla allora non riportarmi niente
-    return {};
 }
 
 void Piece::add_legal_move(int square)
@@ -336,5 +317,4 @@ void Piece::remove_legal_move(int square)
         }
     }
 }
-
 /*Fine Funzioni*/

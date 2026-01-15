@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.5.0)
+
 project(w VERSION 0.1.0 LANGUAGES C CXX)
 
 add_executable(${PROJECT_NAME} 
@@ -22,22 +23,27 @@ add_executable(${PROJECT_NAME}
 )
 # Richiedi wxWidgets
 find_package(wxWidgets REQUIRED COMPONENTS core base)
+
 # Includi e link automatici
 include(${wxWidgets_USE_FILE})
-
-
 
 include(CTest)
 enable_testing()
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+add_subdirectory(Test)
+
 include(CPack)
 # Linka wxWidgets alle librerie
 target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES})
 
-#include(FetchContent) 
 
+#set(SOURCE_FILES GameCharacter.cpp GameCharacter.h)
+#add_executable(unit_testing_example main.cpp)
+#add_library (core $ {SOURCE_FILES})
+#target_link_libraries(unit_testing_example core)
+#include(FetchContent) 
 
 #FetchContent_Declare(
 #    googletest

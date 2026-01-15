@@ -3,11 +3,14 @@
 //Costruttore:
 Handle_Chessboard::Handle_Chessboard
 (
+    Draw_board * board,
     std::shared_ptr<Handle_Fen_String>fen
 )
-    :handler_fen(fen)
+    :draw_class(board),
+    handler_fen(fen)
     {
         turn=WHITE;
+        
     }
 
 Color Handle_Chessboard::get_turn()
@@ -18,9 +21,9 @@ Color Handle_Chessboard::get_turn()
 void Handle_Chessboard::change_turn()
 {
     if(turn==WHITE)
-        turn==BLACK;
+        set_turn(BLACK);
     else
-        turn==WHITE;
+        set_turn(WHITE);
 }
 
 void Handle_Chessboard::set_turn(Color t)
@@ -60,4 +63,93 @@ std::vector<Piece*> Handle_Chessboard::get_no_piece_turn()
         piece_no_turn.push_back(itr);
     }
     return piece_no_turn;
+}
+
+Piece* Handle_Chessboard::find_king(Piece** board, Color color_to_find)
+{
+    for (int i = 0; i < 64; i++) 
+    {
+        if 
+        (
+            board[i] != nullptr && 
+            board[i]->is_king() && 
+            board[i]->get_color() == color_to_find
+        ) 
+        {
+            //wxLogMessage(wxT("Ho trovato il re, è nella casella: [%d]"),board[i]->get_square());
+            return board[i];
+        }
+    }
+    return nullptr;
+}
+
+bool Handle_Chessboard::handle_check_on_king_straight(Piece **board, Color current_player_color)
+{
+    Piece *ptr_king=find_king(board,current_player_color);
+
+    //Singolo spostamento dritto
+    int single_straight[4]={-8,8,-1,1};
+
+    if(ptr_king==nullptr)
+    {
+        wxLogMessage(wxT("C'è un problema, ptr_king è nullptr"));
+        return false;
+    }
+    //Spostamento dritto fino alla fine della scacchiera
+    int end_board_straight[4]=
+    {
+        board[ptr_king->get_square()]->get_row(),
+        7-board[ptr_king->get_square()]->get_row(),
+        board[ptr_king->get_square()]->get_col(),
+        7-board[ptr_king->get_square()]->get_col()
+    };
+
+    for(auto i:single_straight)
+    {
+        int current_move = ptr_king->get_square();
+        int straight_attack = ptr_king->get_square();
+
+        for(int j=0; j<end_board_straight[i]; j++)
+        {
+            current_move+=single_straight[i];
+            
+            //Non deve uscire dai numeri della scacchiera
+            if(current_move<0 || current_move>64)
+            {
+                //wxLogMessage(wxT("current move è uscito dal range del legale"));
+                break;
+            }
+
+            //Se durante il percorso trovo un mio stesso pezzo, esci
+            if
+            (
+                board[current_move]!= nullptr 
+                && board[current_move]->get_color()==current_player_color
+            )
+            {
+                break;
+            }
+
+            //Se durante il percorso trovo la regina o l'alfiere, devo ottenere questo percorso
+            if
+            (      board[current_move]!=nullptr
+                && board[current_move]->get_name_piece()=='Q' 
+                || board[current_move]->get_name_piece()=='R'
+                || board[current_move]->get_name_piece()=='q'
+                || board[current_move]->get_name_piece()=='r'
+            ) 
+            {
+                //Sono indeciso se ripartire da capo = costoso oppure ci deve essere un
+                //altro modo
+                for(int k =0; k<end_board_straight[i]; k++)
+                {
+                    straight_attack+=single_straight[k];
+                    v_check_attack.push_back(straight_attack);
+
+                }
+                return true;
+            }   
+        }
+    }
+    return false;
 }

@@ -12,7 +12,7 @@ void Pawn::update_legal_moves(std::shared_ptr<Handle_Fen_String> ptr_smart)
 {
     std::vector<int> legal_moves={};
 
-    const auto& piece= ptr_smart.get()->get_piece();
+    Piece** piece = ptr_smart.get()->get_piece();
 
     this->handle_movement(piece,legal_moves);
     this->handle_offensive(piece,legal_moves);
@@ -56,15 +56,19 @@ void Pawn::handle_movement(Piece** ptr, std::vector<int>& legal_moves)
 
 void Pawn::handle_offensive(Piece**ptr, std::vector<int>& legal_moves)
 {
-    
+    //le due direzioni di attacco
     int directions[2]{7,9};
     
+    //Ottengo il colore della squadra
     int color_team= this->get_color()==WHITE? -1 : 1;
     
+    //Ciclo le due direzioni d'attacco:
     for(int i=0; i<2; i++)
     {
-        this->get_map_path()[directions[i]]={};
+
+        //this->get_map_path()[directions[i]]={};
         
+        //Inizializzo square come la casella d'attacco
         int square= this->get_square()+directions[i]*color_team;
 
         if(square>=0 && square < 64 && abs(this->get_col()- square %8)<=1)
@@ -79,10 +83,34 @@ void Pawn::handle_offensive(Piece**ptr, std::vector<int>& legal_moves)
 
 }
 
-void Pawn::handle_en_passant(int square)
+void Pawn::get_attack(Piece **board, std::vector<int> &attacked_squares)
 {
-    std::vector<int> legal_moves = this->get_legal_moves();
-    legal_moves.push_back(square);
-    this->set_legal_moves(legal_moves);
+    // 1. Determina la direzione in base al colore
+    // Se Bianco va su (-8), se Nero va giù (+8)
+    int direction = (this->get_color() == WHITE) ? -8 : 8; 
+
+    // 2. Le due diagonali di attacco (Sinistra e Destra)
+    int attack_offsets[] = {direction - 1, direction + 1};
+
+    for(int offset : attack_offsets)
+    {
+        int target = this->get_square() + offset;
+        
+        // Controllo se è fuori dalla scacchiera (verticalmente)
+        if(target < 0 || target >= 64) 
+            continue;
+
+        // Controllo fondamentale: Il pedone non può "fare il giro" del bordo
+        // Se sono sulla colonna H (7) non posso attaccare a destra (colonna 0)
+        int current_col = this->get_col();
+        int target_col = target % 8;
+
+        if(abs(current_col - target_col) <= 1) 
+        {
+            // Aggiungo SEMPRE la casella, anche se è vuota!
+            // Il Re non può andare lì perché è una "kill zone"
+            attacked_squares.push_back(target);
+        }
+    }
 }
 /*-----------FINE FUNZIONI DEL PEDONE---------------*/

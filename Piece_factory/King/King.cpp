@@ -17,19 +17,36 @@ bool King::get_is_check() const
 //Funzione virtuale
 void King::update_legal_moves(std::shared_ptr<Handle_Fen_String> ptr_smart)
 {
-    std::vector<int> legal_moves={};
+    std::vector<int> legal_moves_candidate={};
+    std::vector<int> final_safe_moves={};
+    const auto &piece=ptr_smart.get()->get_piece();
 
-    const auto& board= ptr_smart.get()->get_piece();
+    //Prendo le mosse:
+    handle_movement(piece,legal_moves_candidate);
 
-    handle_movement(board,legal_moves);
+    //Utilizzo la funzione handle_check_king per filtrare le vere mosse che può fare:
+    for(int move : legal_moves_candidate)
+    {
+        std::vector<Piece*> attacking;
+        //Se handle_king_move_check non restituisce true allora in quella casella è 
+        //tranquilla
+        if(!handle_king_move_check(piece,move,attacking))
+        {
+            final_safe_moves.push_back(move);
+        }
+    }
+
+    this->set_legal_moves(final_safe_moves);
 }
 
 
 //Funzione del movimento del re
-void King::handle_movement(Piece**board, std::vector<int> legal_moves)
+void King::handle_movement(Piece**board, std::vector<int> &legal_moves)
 {
-    int direction[8]={8,7,9,1,-1,-7,-8,-9};
+    int direction[8]={-8,8,-1,1,-9,-7,7,9};
     
+    attacked_square_total={};
+    //wxLogMessage(wxT("Entro in handle_movement in King..."));
 
     for(int i=0; i<8; i++)
     {
@@ -45,6 +62,7 @@ void King::handle_movement(Piece**board, std::vector<int> legal_moves)
             {
                 legal_moves.push_back(square);
             }
+            //attacked_square_total.push_back(square);
         }
     }
 }
@@ -98,61 +116,89 @@ void King::handle_arrok(Piece**board, int rook_position, std::vector<Piece*>& pi
 
 }
 
-bool King::is_attack(Piece **board, 
-                     std::vector<Piece *> &pieces, 
-                     std::vector<Piece *> &pieces_attacking_king)
+bool King::is_attack
+(
+    Piece **board, 
+    std::vector<Piece *> &pieces, 
+    std::vector<Piece *> &pieces_attacking_king
+)
 {
+    //Questa funzione viene chiamata per non far suicidare il Re
+    this->is_under_attack=false;
+    pieces_attacking_king.clear();
+
     //Controllo pezzi che attaccano il re:
-    for(Piece* piece: pieces)
+    for(Piece* enemy: pieces)
     {
-        for(int square : piece->get_legal_moves())
+        std::vector<int> attacks;
+        enemy->get_attack(board,attacks);   //Funziona perchè ho messo la funzione virtuale
+        //handle_movement(board,attacks);       //in Piece
+        
+        for(int square : attacks )
         {
             if(square==this->get_square())
             {
-                pieces_attacking_king.push_back(piece);
-                this->is_check=true;
-                return true;
+                pieces_attacking_king.push_back(enemy);
+                this->is_under_attack=true;
+                
+                break;
             }
         }
     }
-    //Se non c'è nessun pezzo allora nulla...
-    pieces_attacking_king={};
-    this->is_check=false;
-    return false;
+    
+    return is_under_attack;
 }
 
-bool King::handle_king_move_check(Piece **board,
-                                  int to_square,
-                                  std::vector<Piece*> pieces_attacking_king)
+void King::get_attack
+(
+    Piece **board, 
+    std::vector<int> &attacked_squares
+)
     {
-    
-        std::vector<Piece*> piece={}; //Creo questo a zero perchè ci devo inserire
-                                  //tutti i pezzi presenti nella scacchiera
-
-        //Devo ottenere tutti i pezzi sulla scacchiera:
-        for(int i=0; i<64; i++)
+        int direction[8]={-8,8,-1,1,-9,-7,7,9};
+        for(int i=0; i<8; i++)
         {
-            if(board[i]->get_color()!=this->get_color() && board[i]!=nullptr)
+            int target= this->get_square() + direction[i];
+            if(target>=0 && target<64 && abs(this->get_col()-target % 8)<=1)
             {
-                piece.push_back(board[i]);
+                attacked_squares.push_back(target);
             }
         }
-
-        int original_square= this->get_square();
-
-        //Controllo se il re è sotto scacco nella direzione scelta:
-        board[to_square]=this;
-        board[original_square]=nullptr;
-        this->set_square(to_square);        
-
-        //Controllo dello scacco:
-        bool is_check= this->is_attack(board,piece,pieces_attacking_king);
-
-        //Resetto tutto:
-        board[original_square]=this;
-        board[to_square]=nullptr;
-        this->set_square(original_square);
-
-        return is_check;
-
     }
+
+bool King::handle_king_move_check
+(
+    Piece **board,
+    int to_square,
+    std::vector<Piece*> pieces_attacking_king
+)
+{
+    // 1. SALVATAGGIO STATO
+    int from_square = this->get_square();
+    Piece* captured_piece = board[to_square]; // Salva chi c'era lì (o nullptr)
+
+    // 2. APPLICA LA MOSSA TEMPORANEA
+    board[to_square] = this;
+    board[from_square] = nullptr;
+    this->set_square(to_square); // Aggiorna le coordinate interne del Re!
+
+    // 3. RECUPERA NEMICI (Attenzione: se ho mangiato un nemico, lui non attacca più!)
+    std::vector<Piece*> active_enemies;
+    for(int i=0; i<64; i++) {
+        if(board[i] != nullptr && board[i]->get_color() != this->get_color()) 
+        {
+            active_enemies.push_back(board[i]);
+        }
+    }
+
+    // 4. VERIFICA SICUREZZA
+    // Qui chiamo la nuova is_attack che usa get_attacks
+    bool is_suicide = this->is_attack(board, active_enemies, pieces_attacking_king);
+
+    // 5. RIPRISTINO TOTALE (Undo move)
+    board[from_square] = this;
+    board[to_square] = captured_piece; // Rimetto il pezzo mangiato (se c'era)
+    this->set_square(from_square);     // Il Re torna a casa
+
+    return is_suicide;
+}

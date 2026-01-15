@@ -11,6 +11,8 @@ public:
     Pawn(int pos, char character);
     
     void update_legal_moves(std::shared_ptr<Handle_Fen_String> ptr_smart) override;
+    void get_attack(Piece **board, std::vector<int> &attacked_squares) override;
+
 
     void handle_movement(Piece** ptr, std::vector<int>& legal_moves);
     void handle_offensive(Piece** ptr, std::vector<int>& legal_moves);

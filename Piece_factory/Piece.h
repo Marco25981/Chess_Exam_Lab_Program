@@ -48,6 +48,7 @@ class Piece
 private:
 
     int row,coloum,square;
+    //static int array_size;
     char name_piece;
     bool is_moved;
 
@@ -112,39 +113,29 @@ public:
         void set_row(int new_row);
         void set_col(int new_col);
         void set_square(int new_square);
-
         void set_name_piece(char new_name);
-
         void set_ismoved(bool new_moved);
-
         void set_color(Color new_color);
-
         void set_legal_moves(std::vector<int> new_legal_moves);
+        //void set_map_path(int square_legal[array_size]);    //devo impostare il vettore in map_path
         
     /*-----------FINE SETTER------------------*/
 
     /*-----------FUNZIONI-----------------*/
 
         /*Inizio: Gestione degli spostamenti:*/
-        void diagonal_move
+        void diagonal_move  //DA FARE: PURAMENTE VIRTUALE (così pulisco il codice)
         (
             Piece** ptr, 
             std::vector<int> &legal_moves
         );
         
-        void straight_move
+        void straight_move  //DA FARE: PURAMENTE VIRTUALE
         (
             Piece** ptr, 
             std::vector<int> &legal_moves
         );
         /*Fine: Gestione degli spostamenti:*/
-
-        //Controlla il percorso del re
-        std::vector<int> check_is_king
-        (
-            std::shared_ptr<Handle_Fen_String> ptr_smart, 
-            Piece *King
-        );
     
         /*Inizio: Gestione delle mosse legali che puoi fare*/
         void add_legal_move(int square);
@@ -158,7 +149,12 @@ public:
         virtual void update_legal_moves
         (
             std::shared_ptr<Handle_Fen_String> ptr_smart
-        )=0;    
+        )=0; 
+        virtual void get_attack     //get_attack è uguale a handle_movement. 
+        (
+            Piece **board, 
+            std::vector<int> &attacked_squares
+        )=0;  
     /*-----------FINE FUNZIONI VIRTUALI----------*/
 
     virtual ~Piece()= default;
