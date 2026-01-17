@@ -176,3 +176,58 @@ TEST_F(Move_Test, Queen_is_pawn_attack)
 
     ASSERT_TRUE(success);
 }
+
+TEST_F(Move_Test, Queen_is_rock)
+{
+    //Creo la situazione di gioco:
+    std::string fen_start = "rnbqkbnr/1ppppppp/8/p7/3P4/3Q4/PPP1PPPP/RNB1KBNR w KQkq - 0 3";
+    fen_string.get()->set_board_fenstring(fen_start); 
+
+    //inizializzo la posizione del pedone bianco e voglio fargli rifare un 
+    //passo doppio
+    int from_queen = 43;
+    int to_jump = 40;
+
+    //Deve passare...
+    engine.get()->update_moves_all_piece();
+    bool success = engine.get()->handle_move(from_queen,to_jump);
+
+    ASSERT_TRUE(success);
+}
+
+TEST_F(Move_Test, Queen_move_after_move_okay)
+{
+    //Creo la situazione di gioco:
+    std::string fen_start = "rnbqkbnr/1ppppppp/8/p7/3P4/3Q4/PPP1PPPP/RNB1KBNR w KQkq - 0 3";
+    fen_string.get()->set_board_fenstring(fen_start); 
+
+    //inizializzo la posizione del pedone bianco e voglio fargli rifare un 
+    //passo doppio
+    int from_queen = 43;
+    int to_jump = 40;
+
+    //Deve passare...
+    engine.get()->update_moves_all_piece();
+    bool success = engine.get()->handle_move(from_queen,to_jump);
+
+    ASSERT_TRUE(success);
+
+    engine.get()->update_moves_all_piece();
+    
+    int from = 40;
+    int jump_jump = 43;
+
+    bool double_move = engine.get()->handle_move(from,jump_jump);
+
+    ASSERT_TRUE(double_move);
+}
+
+TEST_F(Move_Test, Friendly_Attack)
+{
+    int from_attack = 56;
+    int to_attack = 48;
+
+    bool success = engine.get()->handle_move(from_attack,to_attack);
+
+    ASSERT_FALSE(success);
+}

@@ -12,6 +12,7 @@ Handle_Fen_String::Handle_Fen_String()
     }
 
     fen_string="rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR - w KQkq - 0 1";
+
     //Imposto la scacchiera alla fase iniziale
     set_board_fenstring(fen_string);
 }

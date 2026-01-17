@@ -40,12 +40,10 @@ void Draw_board::on_paint(wxPaintEvent& evt)
 }
 
 /*
-
     Note per capire bene come vengono disegnati i quadrati nel caso fai ooh cazzo fai...
     Allora la riga zero è la parte superiore insomma il lato alto del quadrato (la schacchiera)
     riga 1 e colonna 1 appartiene alla grande diagonale a destra quindi va da 0(su) a
     7 (giù).
-
 */
 
 void Draw_board::draw_squares(wxDC& dc, int row, int col, wxCoord square_size)
@@ -137,7 +135,7 @@ void Draw_board::render_piece()
         }
         else
         {
-            wxLogMessage("1 bitmap è inutilizzabile...");
+            //wxLogMessage("1 bitmap è inutilizzabile...");
             continue;
         }
     }    
